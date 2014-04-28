@@ -8,7 +8,6 @@ var fs = require('fs'),
 exports.dust = function() {
 	return {
 		"create": function(config) {
-			console.log("bundalo['dust'].create config", config);
 			//sample config: {"i18n": {below}, "locality": "en-US", "type": "properties|json"}
 			/*	
 				"i18n": {
@@ -27,8 +26,8 @@ exports.dust = function() {
 			var props = reso.resolve("errors/server", locality).file || i18n.contentPath;
 			var readStream = fs.createReadStream(props);
 			spud.deserialize(readStream, 'properties', function (err, data) {
-				//console.log(err || data);
-				//console.log('Conversion complete.');
+				//handle what errors?
+				
 				callback(null, data);
 			});
 		}
