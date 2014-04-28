@@ -19,6 +19,7 @@ exports.dust = function() {
 			i18n = config.i18n;
 			locality = config.locality;
 			type = config.type;
+
 		},
 		"get": function(config, callback) {
 			//sample config {"bundle": "errors/server", "key": "error", "model": {"name": "Will Robinson"}}
@@ -28,7 +29,7 @@ exports.dust = function() {
 			spud.deserialize(readStream, 'properties', function (err, data) {
 				//console.log(err || data);
 				//console.log('Conversion complete.');
-				callback(data);
+				callback(null, data);
 			});
 		}
 	}
