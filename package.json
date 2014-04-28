@@ -1,0 +1,38 @@
+{
+  "name": "bundalo",
+  "version": "0.0.1",
+  "description": "Module for extract/cache/render property files/strings using i18n rules and various rendering engines",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/grawk/bundalo.git"
+  },
+  "keywords": [
+    "node.js",
+    "renderer"
+  ],
+  "author": "@grawk",
+  "license": "Apache 2",
+  "bugs": {
+    "url": "https://github.com/grawk/bundalo/issues"
+  },
+  "homepage": "https://github.com/grawk/bundalo",
+  "devDependencies": {
+    "dustjs-linkedin": "^2.0.0",
+    "dustjs-helpers": "~1.2.0",
+    "jshint": "~2.4.3",
+    "mocha": "~1.9.0",
+    "chai": "~1.5.0",
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.7.0",
+    "grunt-mocha-test": "~0.7.0"
+  },
+  "peerDependencies": {
+    "dustjs-linkedin": "^2.0.0",
+    "spud": "^0.0.3",
+    "file-resolver": "^0.0.1"
+  }
+}
