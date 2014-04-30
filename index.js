@@ -28,9 +28,17 @@ exports.dust = (function () {
 			//sample config {"bundle": "errors/server", "model": {"name": "Will Robinson"}}
 			//console.log("bundalo.get:config", config);
 
+			if (dust.cache && dust.cache[config.bundle]) {
+				dust.render(config.bundle, config.model || {}, function (err, out) {
+					spud.deserialize(new Buffer(out, 'utf8'), 'properties', function (err, data) {
+						callback(null, data);
+					});
+				});
+				return;
+			}
 			var reso = resolver.create({ root: i18n.contentPath, ext: type, fallback: i18n.fallback});
 			var bundleFile = reso.resolve(config.bundle, locality).file || i18n.contentPath;
-			console.log("bundleFile", bundleFile);
+			//console.log("bundleFile", bundleFile);
 
 
 			fs.readFile(bundleFile, {}, function handleBundleBuffer(err, bundleBuffer) {
