@@ -1,7 +1,9 @@
 var fs = require('fs'),
 	spud = require('spud'),
 	resolver = require('file-resolver'),
-	dust = require('dustjs-linkedin'),
+	pollutedust = require('dustjs-linkedin'),
+	freshy = require('freshy'),
+	dust = freshy.freshy('dustjs-linkedin'),
 	i18n,
 	locality,
 	type;
