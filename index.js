@@ -34,24 +34,45 @@ exports.dust = (function () {
 		"get": function (config, callback) {
 			//single bundle config {"bundle": "errors/server", "model": {"name": "Will Robinson"}}
 			//multiple bundle config {"bundle": ["errors/server", "errors/client"], "model": {"name": "Will Robinson"}}
-			//console.log("bundalo.get:config", config);
 
-			//create a bundle key based on bundle name and locality info
-			var reso = resolver.create({ root: i18n.contentPath, ext: type, fallback: i18n.fallback});
-			var bundleFile = reso.resolve(config.bundle, locality).file || i18n.contentPath;
-			var cacheKey = bundleFile.split(i18n.contentPath)[1];
+			var bundleRenderer = {};
 
-			if (dust.cache && dust.cache[cacheKey]) {
-				dustRender(cacheKey, config.model, callback);
-				return;
-			}
+			//assume config.bundle is either an array of bundle strings or a string
+			var configBundle = (config.bundle.constructor === Array) ? config.bundle : [config.bundle];
 
-			//not yet in cache
-			fs.readFile(bundleFile, {}, function handleBundleBuffer(err, bundleBuffer) {
-				var compiled = dust.compile(bundleBuffer.toString(), cacheKey);
-				dust.loadSource(compiled);
-				dustRender(cacheKey, config.model, callback);
+			configBundle.forEach(function(bundle) {
+				bundleRenderer[bundle] = function(cb) {
+					//create a bundle key based on bundle name and locality info
+					var reso = resolver.create({ root: i18n.contentPath, ext: type, fallback: i18n.fallback});
+					var bundleFile = reso.resolve(bundle, locality).file || i18n.contentPath;
+					var cacheKey = bundleFile.split(i18n.contentPath)[1];
+
+					if (dust.cache && dust.cache[cacheKey]) {
+						//console.log("bundalo:incache:",cacheKey);
+						dustRender(cacheKey, config.model, cb);
+						return;
+					}
+
+					//not yet in cache
+					fs.readFile(bundleFile, {}, function handleBundleBuffer(err, bundleBuffer) {
+						//console.log("bundalo:outcache:",cacheKey);
+						var compiled = dust.compile(bundleBuffer.toString(), cacheKey);
+						dust.loadSource(compiled);
+						dustRender(cacheKey, config.model, cb);
+					});
+				};
 			});
+
+			async.parallel(bundleRenderer, function(err, results) {
+				var returnVal = results;
+				console.log("async results", results);
+				//if only one bundle object, remove top level key
+				if (Object.keys(results).length === 1) {
+					returnVal = results[Object.keys(results)[0]];
+				}
+				callback(null, returnVal);
+			});
+
 
 		}
 	}

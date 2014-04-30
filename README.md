@@ -30,12 +30,25 @@ bundalo.create({"i18n": i18n, "locality": locality, "type": "properties"});
 User wants key/values from some bundle file, corrected for locality, and possibly rendered with some data model
 
 ```javascript
-bundalo.get({"bundle": "errors/server", "model": {"name": "Will Robinson"}}, function bundaloReturn(err, data) {
-	//do any further processing of the returned data
-	cb(data);
+_bundalo.get({'bundle': 'errors/server', 'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
+	console.log("what'd we get from bundalo.get?", data, err);
+	cb({
+		'name': data.error
+	});
 });
 ```
 
+User wants multiple bundles in a single call, to avoid calling bundalo multiple times
+
+```javascript
+_bundalo.get({'bundle': ['errors/server', 'errors/client'], 'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
+	console.log("what'd we get from bundalo.get?", data, err);
+	cb({
+		'name': data['errors/client'].error,
+		'servername': data['errors/server'].error
+	});
+});
+```
 ## Design
 
 When a user first requests a bundle, bundalo will:
@@ -46,4 +59,4 @@ When a user first requests a bundle, bundalo will:
 * deserialize the rendered properties file via spud
 * return a JSON data object with the rendered  values
 
-Upon subsequent requests for a bundle, the previously cached compiled template will be re-rendered and returned.  
+Upon subsequent requests for a bundle, the previously cached compiled template will be re-rendered and returned. Cache will be based upon the bundle path provided by the user, plus the locality path information. I.e. 'US/en/foo/bar' is a separate cached object from 'DE/de/foo/bar'.  
