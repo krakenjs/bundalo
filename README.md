@@ -31,7 +31,7 @@ User wants key/values from some bundle file, corrected for locality, and possibl
 _bundalo.get({'bundle': 'errors/server', 'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
 	console.log("what'd we get from bundalo.get?", data, err);
 	cb({
-		'name': data.error
+		'err': data.error
 	});
 });
 ```
@@ -42,11 +42,27 @@ User wants multiple bundles in a single call, to avoid calling bundalo multiple 
 _bundalo.get({'bundle': ['errors/server', 'errors/client'], 'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
 	console.log("what'd we get from bundalo.get?", data, err);
 	cb({
-		'name': data['errors/client'].error,
-		'servername': data['errors/server'].error
+		'clienterr': data['errors/client'].error,
+		'servererr': data['errors/server'].error
 	});
 });
 ```
+
+User wants multiple bundles in a single call, and wants to alias the bundles for easier management upon return
+
+```javascript
+_bundalo.get('bundle': {
+	'server': 'errors/server',
+	'client': 'errors/client'
+}, 'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
+	console.log("what'd we get from bundalo.get?", data, err);
+	cb({
+		'clienterr': data.client.error,
+		'servererr': data.server.error
+	});
+});
+```
+
 ## Design
 
 When a user first requests a bundle, bundalo will:
