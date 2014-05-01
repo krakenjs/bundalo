@@ -1,10 +1,11 @@
+'use strict';
 var fs = require('fs'),
 	spud = require('spud'),
 	resolver = require('../lib/resolver'),
 	async = require('async'),
 	returnalo = require('../lib/returnalo'),
 	cache = {};
-module.exports = function (config, callback) {
+module.exports = function getNone(config, callback) {
 		//single bundle config {"bundle": "errors/server"}
 		//multiple bundle config {"bundle": ["errors/server", "errors/client"]}
 
@@ -15,7 +16,7 @@ module.exports = function (config, callback) {
 
 		configBundle.forEach(function processBundle(bundle) {
 			var resolved = resolver.resolve(bundle);
-			bundleReader[bundle] = function(cb) {
+			bundleReader[bundle] = function (cb) {
 				//create a bundle key based on bundle name and locality info
 				var bundleFile = resolved.bundleFile;
 				var cacheKey = resolved.cacheKey;
@@ -40,4 +41,4 @@ module.exports = function (config, callback) {
 		async.parallel(bundleReader, returnalo(callback));
 
 
-	}
+	};

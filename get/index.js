@@ -1,8 +1,9 @@
+'use strict';
 var dust = require("./dust");
 var none = require("./none");
-exports.dust = function() {
+exports.dust = function () {
 	return dust;
 };
-exports.none = function() {
+exports.none = function () {
 	return none;
 };
