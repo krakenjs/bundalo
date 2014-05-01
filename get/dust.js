@@ -47,7 +47,7 @@ module.exports = function (config, callback) {
 			};
 		});
 
-		async.parallel(bundleRenderer, returnalo);
+		async.parallel(bundleRenderer, returnalo(callback));
 
 
 	}
