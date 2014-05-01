@@ -4,6 +4,7 @@ var fs = require('fs'),
 	resolver = require('../lib/resolver'),
 	freshy = require('freshy'),
 	dust = freshy.freshy('dustjs-linkedin'),
+	loopalo = require('../lib/loopalo'),
 	returnalo = require('../lib/returnalo'),
 	async = require('async');
 
@@ -19,12 +20,8 @@ module.exports = function getDust(config, callback) {
 	//single bundle config {"bundle": "errors/server", "model": {"name": "Will Robinson"}}
 	//multiple bundle config {"bundle": ["errors/server", "errors/client"], "model": {"name": "Will Robinson"}}
 
-	var bundleRenderer = {};
-
-	//assume config.bundle is either an array of bundle strings or a string
-	var configBundle = (config.bundle.constructor === Array) ? config.bundle : [config.bundle];
-
-	configBundle.forEach(function processBundle(bundle) {
+	//var bundleRenderer = {};
+	var handler = function processBundle(bundle) {
 		var resolved = resolver.resolve(bundle);
 		bundleRenderer[bundle] = function (cb) {
 			//create a bundle key based on bundle name and locality info
@@ -46,7 +43,12 @@ module.exports = function getDust(config, callback) {
 				dustRender(cacheKey, config.model, cb);
 			});
 		};
-	});
+	}
+	loopalo(config, handler, callback);
+	//assume config.bundle is either an array of bundle strings or a string
+	//var configBundle = (config.bundle.constructor === Array) ? config.bundle : [config.bundle];
 
-	async.parallel(bundleRenderer, returnalo(callback));
+	// configBundle.forEach();
+
+	// async.parallel(bundleRenderer, returnalo(callback));
 };
