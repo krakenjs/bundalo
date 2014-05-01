@@ -6,13 +6,12 @@ Extract/cache/render property files/strings using i18n rules and various renderi
 
 ### Initialize bundalo
 
-Call bundalo module with a key that matches your template engine. Currently only dust is supported
+Call bundalo module with a key that matches your template engine. Currently only dust and none are supported
 
 ```javascript
 var bundalo = require('bundalo');
 
-bundalo = bundalo[engine]();
-bundalo.create({"i18n": i18n, "locality": locality, "type": "properties"});
+var _bundalo = bundalo({'i18n': i18n, 'locality': locality, 'engine': engine});
 ```
 
 * i18n object: 
@@ -23,7 +22,6 @@ bundalo.create({"i18n": i18n, "locality": locality, "type": "properties"});
 },
 ```
 * locality string (e.g. "en-US")
-* format and file extension of content files (json, properties)
 
 ### Use bundalo
 

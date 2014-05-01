@@ -1,7 +1,7 @@
 {
   "name": "bundalo",
   "version": "0.0.7",
-  "description": "Module for extract/cache/render property files/strings using i18n rules and various rendering engines",
+  "description": "Extract/cache/render property files/strings using i18n rules and various rendering engines",
   "main": "index.js",
   "scripts": {
     "test": "grunt test"
