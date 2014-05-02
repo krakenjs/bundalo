@@ -2,7 +2,7 @@
 var fs = require('fs'),
 	spud = require('spud'),
 	freshy = require('freshy'),
-	dust = freshy.freshy('dustjs-linkedin'),
+	dust = (require.cache["dustjs-linkedin"]) ? freshy.freshy('dustjs-linkedin') : require('dustjs-linkedin'),
 	loopalo = require('../lib/loopalo');
 
 
@@ -10,7 +10,7 @@ var fs = require('fs'),
 module.exports = function getDust(config, callback) {
 	//single bundle config {"bundle": "errors/server", "model": {"name": "Will Robinson"}}
 	//multiple bundle config {"bundle": ["errors/server", "errors/client"], "model": {"name": "Will Robinson"}}
-	var dustRender = function(cacheKey, model, cb) {
+	var dustRender = function (cacheKey, model, cb) {
 		dust.render(cacheKey, model || {}, function renderCallback(err, out) {
 			spud.deserialize(new Buffer(out, 'utf8'), 'properties', function deserializeCallback(err, data) {
 				cb(null, data);

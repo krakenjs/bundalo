@@ -16,7 +16,8 @@ module.exports = function (grunt) {
                 timeout: 6000,
                 ignoreLeaks: false,
                 ui: 'bdd',
-                reporter: 'spec'
+                reporter: 'spec',
+                grep: grunt.option('grep') || '@nofallback@'
             }
         }
     });
