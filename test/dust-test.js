@@ -4,7 +4,7 @@
 var bundalo = require("../index");
 var _bundalo;
 
-describe("bundalo dust bundler, no locale @nofallback@dust@", function () {
+describe("bundalo dust bundler, no locale @dust@nofallback@", function () {
 	before(function () {
 		var i18n = {
 			"contentPath": process.cwd() + "/test/fixture/nolocale",
@@ -23,7 +23,7 @@ describe("bundalo dust bundler, no locale @nofallback@dust@", function () {
 		_bundalo.get({
 			'bundle': 'nest/dusta'
 		}, function bundaloReturn(err, data) {
-			if (data.greeting) {
+			if (data.greeting && _bundalo.__cache()['/nest/dusta.properties']) {
 				done();
 			} else {
 				done(new Error("life isn't what you thought it would be"));
@@ -56,11 +56,11 @@ describe("bundalo dust bundler, no locale @nofallback@dust@", function () {
 		});
 	});
 });
-describe("bundalo dust bundler, fallback locale", function () {
+describe("bundalo dust bundler, fallback locale @dust@fallback@", function () {
 	before(function () {
 		var i18n = {
 			"contentPath": process.cwd() + "/test/fixture/locales",
-			"fallback": "en-US"
+			"fallback": "en_US"
 		};
 		var engine = "dust";
 		var locality = "fr-FR";
@@ -113,7 +113,7 @@ describe("bundalo dust bundler, existing locale @dust@nofallback@", function () 
 	before(function () {
 		var i18n = {
 			"contentPath": process.cwd() + "/test/fixture/locales",
-			"fallback": "en-US"
+			"fallback": "en_US"
 		};
 		var engine = "dust";
 		var locality = "es-ES";
@@ -139,7 +139,7 @@ describe("bundalo dust bundler, existing locale @dust@nofallback@", function () 
 		_bundalo.get({
 			'bundle': ['nest/dusta', 'nest/dustb']
 		}, function bundaloReturn(err, data) {
-			if (data['nest/dusta'].greeting && data['nest/dustb'].signoff) {
+			if (data['nest/dusta'].greeting && data['nest/dustb'].signoff && _bundalo.__cache()['/ES/es/nest/dustb.properties']) {
 				done();
 			} else {
 				done(new Error("life isn't what you thought it would be"));

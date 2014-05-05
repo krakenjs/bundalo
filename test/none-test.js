@@ -23,7 +23,7 @@ describe("bundalo none bundler, no locale @none@nofallback@", function () {
 		_bundalo.get({
 			'bundle': 'nest/nonea'
 		}, function bundaloReturn(err, data) {
-			if (data.greeting) {
+			if (data.greeting && _bundalo.__cache()['/nest/nonea.properties']) {
 				done();
 			} else {
 				done(new Error("life isn't what you thought it would be"));
@@ -139,7 +139,7 @@ describe("bundalo none bundler, existing locale @none@nofallback@", function () 
 		_bundalo.get({
 			'bundle': ['nest/nonea', 'nest/noneb']
 		}, function bundaloReturn(err, data) {
-			if (data['nest/nonea'].greeting && data['nest/noneb'].signoff) {
+			if (data['nest/nonea'].greeting && data['nest/noneb'].signoff && _bundalo.__cache()['/ES/es/nest/noneb.properties']) {
 				done();
 			} else {
 				done(new Error("life isn't what you thought it would be"));

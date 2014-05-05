@@ -17,7 +17,7 @@ module.exports = function (grunt) {
                 ignoreLeaks: false,
                 ui: 'bdd',
                 reporter: 'spec',
-                grep: grunt.option('grep') || '@nofallback@'
+                grep: grunt.option('grep') || 0
             }
         }
     });

@@ -3,9 +3,10 @@ var fs = require('fs'),
 	spud = require('spud'),
 	loopalo = require('../lib/loopalo'),
 	cache = {};
-module.exports = function getNone(config, callback) {
-	//single bundle config {"bundle": "errors/server"}
-	//multiple bundle config {"bundle": ["errors/server", "errors/client"]}
+
+var None = function() {}
+
+None.prototype.get = function (config, callback) {
 	var noneBundler = function (bundleFile, cacheKey, cb) {
 		if (cache && cache[cacheKey]) {
 			//console.log("bundalo:none:incache:",cacheKey);
@@ -23,3 +24,9 @@ module.exports = function getNone(config, callback) {
 	};
 	loopalo(config, noneBundler, callback);
 };
+
+None.prototype.__cache = function () {
+	return cache;
+};
+
+module.exports = new None();

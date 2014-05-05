@@ -7,7 +7,9 @@ var fs = require('fs'),
 
 
 
-module.exports = function getDust(config, callback) {
+var Dust = function () {};
+
+Dust.prototype.get = function (config, callback) {
 	//single bundle config {"bundle": "errors/server", "model": {"name": "Will Robinson"}}
 	//multiple bundle config {"bundle": ["errors/server", "errors/client"], "model": {"name": "Will Robinson"}}
 	var dustRender = function (cacheKey, model, cb) {
@@ -36,3 +38,9 @@ module.exports = function getDust(config, callback) {
 
 	loopalo(config, dustBundler, callback);
 };
+
+Dust.prototype.__cache = function () {
+	return dust.cache;
+};
+
+module.exports = new Dust();
