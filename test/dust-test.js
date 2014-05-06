@@ -13,12 +13,24 @@ describe("bundalo dust bundler, no locale @dust@nofallback@nolocale@", function 
 		return;
 	});
 
-	it("should give back single bundle", function (done) {
+	it("should give back single bundle with no key when config.bundle is a string", function (done) {
 		_bundalo.get({
 			'bundle': 'nest/dusta',
 			'locality': ''
 		}, function bundaloReturn(err, data) {
 			if (data.greeting && _bundalo.__cache()['/nest/dusta.properties']) {
+				done();
+			} else {
+				done(new Error("life isn't what you thought it would be"));
+			}
+		});
+	});
+	it("should give back bundle with key when config.bundle is an Array", function (done) {
+		_bundalo.get({
+			'bundle': ['nest/dusta'],
+			'locality': ''
+		}, function bundaloReturn(err, data) {
+			if (data['nest/dusta'].greeting && _bundalo.__cache()['/nest/dusta.properties']) {
 				done();
 			} else {
 				done(new Error("life isn't what you thought it would be"));
