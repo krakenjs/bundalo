@@ -1,6 +1,6 @@
 {
   "name": "bundalo",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Extract/cache/render property files/strings using i18n rules and various rendering engines",
   "main": "index.js",
   "scripts": {
@@ -37,6 +37,5 @@
     "freshy": "^0.0.1",
     "async": "^0.2.0",
     "lodash": "^2.4.0"
-
   }
 }
