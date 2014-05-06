@@ -6,12 +6,16 @@ Extract/cache/render property files/strings using i18n rules and various renderi
 
 ### Initialize bundalo
 
-Call bundalo module with a key that matches your template engine. Currently only dust and none are supported
+Call bundalo module with a key that matches your template engine, plus locale information.
+Currently only dust and none are supported as engines.
 
 ```javascript
-var bundalo = require('bundalo');
-
-var _bundalo = bundalo({'i18n': i18n, 'locality': locality, 'engine': engine});
+var config = {
+	"contentPath": "locales/", //required
+	"fallback": "en-US",       //optional
+	"engine": "dust"           //required
+};
+var bundalo = require('bundalo')(config);
 ```
 
 * i18n object: 
@@ -28,7 +32,7 @@ var _bundalo = bundalo({'i18n': i18n, 'locality': locality, 'engine': engine});
 User wants key/values from some bundle file, corrected for locality, and possibly rendered with some data model
 
 ```javascript
-_bundalo.get({'bundle': 'errors/server', 'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
+bundalo.get({'bundle': 'errors/server','locality': 'en-US', 'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
 	console.log("what'd we get from bundalo.get?", data, err);
 	cb({
 		'err': data.error
@@ -39,7 +43,7 @@ _bundalo.get({'bundle': 'errors/server', 'model': {'name': 'Will Robinson'}}, fu
 User wants multiple bundles in a single call, to avoid calling bundalo multiple times
 
 ```javascript
-_bundalo.get({'bundle': ['errors/server', 'errors/client'], 'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
+bundalo.get({'bundle': ['errors/server', 'errors/client'], 'locality': 'en-US',  'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
 	console.log("what'd we get from bundalo.get?", data, err);
 	cb({
 		'clienterr': data['errors/client'].error,
@@ -51,10 +55,10 @@ _bundalo.get({'bundle': ['errors/server', 'errors/client'], 'model': {'name': 'W
 User wants multiple bundles in a single call, and wants to alias the bundles for easier management upon return
 
 ```javascript
-_bundalo.get('bundle': {
+bundalo.get('bundle': {
 	'server': 'errors/server',
 	'client': 'errors/client'
-}, 'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
+}, 'locality': 'en-US', 'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
 	console.log("what'd we get from bundalo.get?", data, err);
 	cb({
 		'clienterr': data.client.error,

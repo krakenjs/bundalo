@@ -1,24 +1,26 @@
 'use strict';
 var fs = require('fs'),
 	spud = require('spud'),
-	loopalo = require('../lib/loopalo'),
-	cache = {};
+	loopalo = require('../lib/loopalo');
 
-var None = function() {}
+var None = function() {
+	this.cache = {};
+}
 
 None.prototype.get = function (config, callback) {
+	var that = this;
 	var noneBundler = function (bundleFile, cacheKey, cb) {
-		if (cache && cache[cacheKey]) {
+		if (that.cache && that.cache[cacheKey]) {
 			//console.log("bundalo:none:incache:",cacheKey);
-			cb(null, cache[cacheKey]);
+			cb(null, that.cache[cacheKey]);
 			return;
 		}
 		//not yet in cache
 		fs.readFile(bundleFile, {}, function handleBundleBuffer(err, bundleBuffer) {
 			//console.log("bundalo:none:outcache:",cacheKey);
 			spud.deserialize(bundleBuffer, 'properties', function (err, bundleJSON) {
-				cache[cacheKey] = bundleJSON;
-				cb(null, cache[cacheKey]);
+				that.cache[cacheKey] = bundleJSON;
+				cb(null, that.cache[cacheKey]);
 			});
 		});
 	};
@@ -26,7 +28,7 @@ None.prototype.get = function (config, callback) {
 };
 
 None.prototype.__cache = function () {
-	return cache;
+	return this.cache;
 };
 
-module.exports = new None();
+module.exports = None;
