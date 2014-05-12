@@ -9,7 +9,7 @@ describe("bundalo none bundler, no locale @none@nofallback@", function () {
 	var fallback =  "";
 	var _bundalo;
 	before(function () {
-		_bundalo = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback});
+		_bundalo = new bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback});
 		return;
 	});
 
@@ -60,7 +60,7 @@ describe("bundalo none bundler, existing locale @none@nofallback@", function () 
 	var fallback =  "en-US";
 	var _bundalo;
 	before(function () {
-		_bundalo = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback});
+		_bundalo = new bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback});
 		return;
 	});
 	it("should give back single bundle", function (done) {

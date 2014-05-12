@@ -8,7 +8,7 @@ describe("bundalo Error conditions @errors@", function () {
 	it("will throw an error with no contentPath", function (done) {
 		assert.throws(
 			function () {
-				bundalo({"engine": "dust"});
+				new bundalo({"engine": "dust"});
 			},
 			Error
 		);
@@ -17,7 +17,7 @@ describe("bundalo Error conditions @errors@", function () {
 	it("will throw an error with no engine", function (done) {
 		assert.throws(
 			function () {
-				var ret = bundalo({"contentPath": "./"});
+				var ret = new bundalo({"contentPath": "./"});
 			},
 			Error
 		);
@@ -26,7 +26,7 @@ describe("bundalo Error conditions @errors@", function () {
 	it("will throw an error with non-existent engine", function (done) {
 		assert.throws(
 			function () {
-				var ret = bundalo({"engine": "raptorjs", "contentPath": "./"});
+				var ret = new bundalo({"engine": "raptorjs", "contentPath": "./"});
 			},
 			Error
 		);

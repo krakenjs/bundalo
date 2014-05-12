@@ -5,11 +5,11 @@ var bundalo = require("../index");
 var engine = "dust";
 
 describe("bundalo dust bundler, no locale @dust@nofallback@nolocale@", function () {
-	var contentPath =  process.cwd() + "/test/fixture/nolocale";
-	var fallback =  "";
+	var contentPath = process.cwd() + "/test/fixture/nolocale";
+	var fallback = "";
 	var _bundalo;
 	before(function () {
-		_bundalo = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback});
+		_bundalo = new bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback});
 		return;
 	});
 
@@ -68,11 +68,11 @@ describe("bundalo dust bundler, no locale @dust@nofallback@nolocale@", function 
 
 
 describe("bundalo dust bundler, existing locale @dust@nofallback@locale@", function () {
-	var contentPath =  process.cwd() + "/test/fixture/locales";
-	var fallback =  "en-US";
+	var contentPath = process.cwd() + "/test/fixture/locales";
+	var fallback = "en-US";
 	var _bundalo;
 	before(function () {
-		_bundalo = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback});
+		_bundalo = new bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback});
 		return;
 	});
 
@@ -110,6 +110,47 @@ describe("bundalo dust bundler, existing locale @dust@nofallback@locale@", funct
 		}, function bundaloReturn(err, data) {
 			if (data.dusta.greeting && data.dustb.signoff) {
 				done();
+			} else {
+				done(new Error("life isn't what you thought it would be"));
+			}
+		});
+	});
+});
+
+describe("bundalo caching @dust@caching@", function () {
+	var contentPathLo = process.cwd() + "/test/fixture/locales";
+	var contentPathNo = process.cwd() + "/test/fixture/nolocale";
+
+	var fallback = "en-US";
+	var nofallback = "";
+	var bundalolo, bundalono;
+	before(function () {
+		bundalolo = new (bundalo({"contentPath": contentPathLo, "engine": engine, "fallback": fallback}))();
+		//bundalolo = new bundalolo();
+		bundalono = new (bundalo({"contentPath": contentPathNo, "engine": engine, "fallback": nofallback}))();
+		//bundalono = new bundalono();
+		return;
+	});
+	it("should be per-instance", function (done) {
+		bundalono.get({
+			'bundle': 'nest/dusta',
+			'locality': ''
+		}, function bundaloReturn(err, data) {
+			console.log(data);
+			console.log(bundalolo.__cache(), bundalono.__cache());
+			if (data.greeting && bundalono.__cache()['/nest/dusta.properties']) {
+				bundalolo.get({
+					'bundle': 'nest/dusta',
+					'locality': 'en-US'
+				}, function bundaloReturn(err, data) {
+					console.log(data);
+					console.log(bundalolo.__cache(), bundalono.__cache());
+					if (data.greeting && bundalono.__cache()['/nest/dusta.properties']) {
+						done();
+					} else {
+						done(new Error("life isn't what you thought it would be"));
+					}
+				});
 			} else {
 				done(new Error("life isn't what you thought it would be"));
 			}

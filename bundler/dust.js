@@ -23,14 +23,14 @@ Dust.prototype.get = function (config, callback) {
 	};
 	var dustBundler = function (bundleFile, cacheKey, cb) {
 		if (that.dust.cache && that.dust.cache[cacheKey]) {
-			//console.log("bundalo:dust:incache:",cacheKey);
+			console.log("bundalo:dust:incache:",cacheKey);
 			dustRender(cacheKey, config.model, cb);
 			return;
 		}
 
 		//not yet in cache
 		fs.readFile(bundleFile, {}, function handleBundleBuffer(err, bundleBuffer) {
-			//console.log("bundalo:dust:outcache:",cacheKey);
+			console.log("bundalo:dust:outcache:",cacheKey);
 			var compiled = that.dust.compile(bundleBuffer.toString(), cacheKey);
 			that.dust.loadSource(compiled);
 			dustRender(cacheKey, config.model, cb);

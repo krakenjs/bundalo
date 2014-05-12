@@ -1,7 +1,8 @@
 'use strict';
-var resolver = require('./lib/resolver');
 
-var Bundalo = function (config) {
+function Bundalo(config) {
+	var resolver = require('./lib/resolver');
+
 	var _bundler;
 	//look for any config errors here
 	if (config.contentPath === undefined || config.engine === undefined) {
@@ -13,7 +14,8 @@ var Bundalo = function (config) {
 		throw new Error("[bundalo] Please provide a valid engine property on the config parameter");
 	}
 	resolver.init(config);
-	return new _bundler();
-};
+	return _bundler;
+}
+
 module.exports = Bundalo;
 
