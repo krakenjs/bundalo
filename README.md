@@ -13,26 +13,29 @@ Currently only dust and none are supported as engines.
 var config = {
 	"contentPath": "locales/", //required
 	"fallback": "en-US",       //optional
-	"engine": "dust"           //required
+	"engine": "dust",          //required
+	"cache": false             //optional, default is true
 };
-var bundalo = require('bundalo')(config);
+var config2 = {
+	"contentPath": "globals/",
+	"fallback": "",
+	"engine: "none
+};
+var bundalo = require('bundalo');
+
+//creating two bundalo instances. Each has its own cache
+var bundle = bundalo(config);
+var bundle2 = bundalo(config);
+
 ```
 
-* i18n object: 
-```javascript
- "i18n": {
-    "contentPath": "path:./locales",
-    "fallback": "en-US"
-},
 ```
-* locality string (e.g. "en-US")
-
 ### Use bundalo
 
 User wants key/values from some bundle file, corrected for locality, and possibly rendered with some data model
 
 ```javascript
-bundalo.get({'bundle': 'errors/server','locality': 'en-US', 'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
+bundle.get({'bundle': 'errors/server','locality': 'en-US', 'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
 	console.log("what'd we get from bundalo.get?", data, err);
 	cb({
 		'err': data.error
@@ -43,7 +46,7 @@ bundalo.get({'bundle': 'errors/server','locality': 'en-US', 'model': {'name': 'W
 User wants multiple bundles in a single call, to avoid calling bundalo multiple times
 
 ```javascript
-bundalo.get({'bundle': ['errors/server', 'errors/client'], 'locality': 'en-US',  'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
+bundle.get({'bundle': ['errors/server', 'errors/client'], 'locality': 'en-US',  'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
 	console.log("what'd we get from bundalo.get?", data, err);
 	cb({
 		'clienterr': data['errors/client'].error,
@@ -55,7 +58,7 @@ bundalo.get({'bundle': ['errors/server', 'errors/client'], 'locality': 'en-US', 
 User wants multiple bundles in a single call, and wants to alias the bundles for easier management upon return
 
 ```javascript
-bundalo.get('bundle': {
+bundle.get('bundle': {
 	'server': 'errors/server',
 	'client': 'errors/client'
 }, 'locality': 'en-US', 'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
@@ -71,10 +74,13 @@ bundalo.get('bundle': {
 
 When a user first requests a bundle, bundalo will:
 * fetch the correct file from the file system based on locality
-* compile the properties file into a dust template
-* cache the compiled dust template
-* render the template with any provided data model
+* [dust only] compile the properties file into a dust template
+* cache the [compiled dust] template
+* [dust only] render the template with any provided data model
 * deserialize the rendered properties file via spud
 * return a JSON data object with the rendered  values
 
-Upon subsequent requests for a bundle, the previously cached compiled template will be re-rendered and returned. Cache will be based upon the bundle path provided by the user, plus the locality path information. I.e. 'US/en/foo/bar' is a separate cached object from 'DE/de/foo/bar'.  
+Upon subsequent requests for a bundle, the previously cached compiled template will be re-rendered and returned.
+Cache will be based upon the bundle path provided by the user, plus the locality path information.
+I.e. 'US/en/foo/bar' is a separate cached object from 'DE/de/foo/bar'.
+Cache is consistent per bundalo instance created.
