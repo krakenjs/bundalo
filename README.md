@@ -10,6 +10,9 @@ Call bundalo module with a key that matches your template engine, plus locale in
 Currently only dust and none are supported as engines.
 
 ```javascript
+var bundalo = require('bundalo');
+
+//couple of configs for later
 var config = {
 	"contentPath": "locales/", //required
 	"fallback": "en-US",       //optional
@@ -21,9 +24,8 @@ var config2 = {
 	"fallback": "",
 	"engine: "none
 };
-var bundalo = require('bundalo');
 
-//creating two bundalo instances. Each has its own cache
+//create two bundalo instances. Each has its own cache
 var bundle = bundalo(config);
 var bundle2 = bundalo(config);
 
