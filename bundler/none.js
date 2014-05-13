@@ -1,10 +1,12 @@
 'use strict';
-var fs = require('fs'),
-	spud = require('spud'),
-	loopalo = require('../lib/loopalo');
+var fs = require('fs');
+var spud = require('spud');
+var loopalo = require('../lib/loopalo');
+var Resolver = require('../lib/resolver');
+
 
 var None = function (config) {
-	this.resolver = new (require('../lib/resolver'))();
+	this.resolver = new Resolver();
 	this.resolver.init(config);
 	this.cache = {};
 };

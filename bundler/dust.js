@@ -1,15 +1,17 @@
 'use strict';
-var fs = require('fs'),
-	spud = require('spud'),
-	freshy = require('freshy'),
-	loopalo = require('../lib/loopalo'),
-	doost = require('dustjs-linkedin');
+var fs = require('fs');
+var spud = require('spud');
+var freshy = require('freshy');
+var loopalo = require('../lib/loopalo');
+//import dust here to get around issue in freshy where freshy.freshy doesn't properly check for an existing copy
+var doost = require('dustjs-linkedin');
+var Resolver = require('../lib/resolver');
 
 
 
 var Dust = function (config) {
 	this.dust = freshy.freshy('dustjs-linkedin');
-	this.resolver = new (require('../lib/resolver'))();
+	this.resolver = new Resolver();
 	this.resolver.init(config);
 };
 
@@ -44,7 +46,7 @@ Dust.prototype.get = function (config, callback) {
 };
 
 Dust.prototype.__cache = function () {
-		return this.dust.cache;
+	return this.dust.cache;
 };
 
 module.exports = Dust;
