@@ -13,22 +13,26 @@ function Dust(config) {
 	this.dust = freshy.freshy('dustjs-linkedin');
 	this.resolver = new Resolver();
 	this.resolver.init(config);
+	this.doCache = (config.cache !== undefined && config.cache === false) ? false : true;
 };
 
 Dust.prototype.get = function (config, callback) {
 	//single bundle config {"bundle": "errors/server", "model": {"name": "Will Robinson"}}
 	//multiple bundle config {"bundle": ["errors/server", "errors/client"], "model": {"name": "Will Robinson"}}
-	var doCache = (config.cache && config.cache === false) ? false : true;
 	var that = this;
 	function dustRender(cacheKey, model, cb) {
 		that.dust.render(cacheKey, model || {}, function renderCallback(err, out) {
+			console.log("doCache", that.doCache);
+			if (that.doCache === false) {
+				delete that.dust.cache[cacheKey];
+			}
 			spud.deserialize(new Buffer(out, 'utf8'), 'properties', function deserializeCallback(err, data) {
 				cb(null, data);
 			});
 		});
 	};
 	function dustBundler(bundleFile, cacheKey, cb) {
-		if (doCache === true && that.dust.cache && that.dust.cache[cacheKey]) {
+		if (that.dust.cache && that.dust.cache[cacheKey]) {
 			dustRender(cacheKey, config.model, cb);
 			return;
 		}
@@ -37,7 +41,6 @@ Dust.prototype.get = function (config, callback) {
 		fs.readFile(bundleFile, {}, function handleBundleBuffer(err, bundleBuffer) {
 			var compiled = that.dust.compile(bundleBuffer.toString(), cacheKey);
 			that.dust.loadSource(compiled);
-			//that.dust.cache[cacheKey] = compiled;
 			dustRender(cacheKey, config.model, cb);
 		});
 	};

@@ -12,10 +12,29 @@ describe("bundalo dust bundler @dust@", function () {
 		var bundloo = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback});
 		var bundlee = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback});
 		bundloo.get({
-			'bundle': 'nest/nonea',
+			'bundle': 'nest/dusta',
 			'locality': ''
 		}, function bundaloReturn(err, data) {
-			if (data.greeting && bundloo.__cache()['/nest/nonea.properties'] && !bundlee.__cache()['/nest/nonea.properties']) {
+			if (data.greeting && bundloo.__cache()['/nest/dusta.properties'] && !bundlee.__cache()['/nest/dusta.properties']) {
+				done();
+			} else {
+				done(new Error("Kablooey"));
+			}
+		});
+	});
+});
+
+describe("bundalo dust bundler @dust@disableCache@", function () {
+	it("should not maintain cache", function (done) {
+		var contentPath =  process.cwd() + "/test/fixture/nolocale";
+		var fallback =  "";
+		var bundloo = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback, "cache": false});
+		bundloo.get({
+			'bundle': 'nest/dusta',
+			'locality': ''
+		}, function bundaloReturn(err, data) {
+			console.log(bundloo.__cache());
+			if (data.greeting && !bundloo.__cache()['/nest/dusta.properties']) {
 				done();
 			} else {
 				done(new Error("Kablooey"));

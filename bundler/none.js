@@ -8,6 +8,7 @@ var Resolver = require('../lib/resolver');
 function None(config) {
 	this.resolver = new Resolver();
 	this.resolver.init(config);
+	this.doCache = (config.cache !== undefined && config.cache === false) ? false : true;
 	this.cache = {};
 };
 
@@ -22,8 +23,8 @@ None.prototype.get = function (config, callback) {
 		//not yet in cache
 		fs.readFile(bundleFile, {}, function handleBundleBuffer(err, bundleBuffer) {
 			spud.deserialize(bundleBuffer, 'properties', function (err, bundleJSON) {
-				that.cache[cacheKey] = bundleJSON;
-				cb(null, that.cache[cacheKey]);
+				(that.doCache) ? (that.cache[cacheKey] = bundleJSON) : "";
+				cb(null, bundleJSON);
 			});
 		});
 	};

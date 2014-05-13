@@ -22,6 +22,26 @@ describe("bundalo none bundler @none@", function () {
 		});
 	});
 });
+
+describe("bundalo none bundler @none@disableCache@", function () {
+	it("should not maintain cache", function (done) {
+		var contentPath =  process.cwd() + "/test/fixture/nolocale";
+		var fallback =  "";
+		var bundloo = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback, "cache": false});
+		bundloo.get({
+			'bundle': 'nest/nonea',
+			'locality': ''
+		}, function bundaloReturn(err, data) {
+			console.log(bundloo.__cache());
+			if (data.greeting && !bundloo.__cache()['/nest/nonea.properties']) {
+				done();
+			} else {
+				done(new Error("Kablooey"));
+			}
+		});
+	});
+});
+
 describe("bundalo none bundler, no locale @none@nofallback@", function () {
 	var contentPath =  process.cwd() + "/test/fixture/nolocale";
 	var fallback =  "";
