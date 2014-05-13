@@ -5,7 +5,7 @@ var loopalo = require('../lib/loopalo');
 var Resolver = require('../lib/resolver');
 
 
-var None = function (config) {
+function None(config) {
 	this.resolver = new Resolver();
 	this.resolver.init(config);
 	this.cache = {};
@@ -14,7 +14,7 @@ var None = function (config) {
 None.prototype.get = function (config, callback) {
 	var that = this;
 
-	var noneBundler = function (bundleFile, cacheKey, cb) {
+	function noneBundler(bundleFile, cacheKey, cb) {
 		if (that.cache && that.cache[cacheKey]) {
 			cb(null, that.cache[cacheKey]);
 			return;
