@@ -2,12 +2,15 @@
 var fs = require('fs'),
 	spud = require('spud'),
 	freshy = require('freshy'),
-	loopalo = require('../lib/loopalo');
+	loopalo = require('../lib/loopalo'),
+	doost = require('dustjs-linkedin');
 
 
 
-var Dust = function () {
-	this.dust = (require.cache["dustjs-linkedin"]) ? freshy.freshy('dustjs-linkedin') : require('dustjs-linkedin');
+var Dust = function (config) {
+	this.dust = freshy.freshy('dustjs-linkedin');
+	this.resolver = new (require('../lib/resolver'))();
+	this.resolver.init(config);
 };
 
 Dust.prototype.get = function (config, callback) {
@@ -23,26 +26,25 @@ Dust.prototype.get = function (config, callback) {
 	};
 	var dustBundler = function (bundleFile, cacheKey, cb) {
 		if (that.dust.cache && that.dust.cache[cacheKey]) {
-			console.log("bundalo:dust:incache:",cacheKey);
 			dustRender(cacheKey, config.model, cb);
 			return;
 		}
 
 		//not yet in cache
 		fs.readFile(bundleFile, {}, function handleBundleBuffer(err, bundleBuffer) {
-			console.log("bundalo:dust:outcache:",cacheKey);
 			var compiled = that.dust.compile(bundleBuffer.toString(), cacheKey);
 			that.dust.loadSource(compiled);
+			//that.dust.cache[cacheKey] = compiled;
 			dustRender(cacheKey, config.model, cb);
 		});
 	};
 
 
-	loopalo(config, dustBundler, callback);
+	loopalo(config, this.resolver, dustBundler, callback);
 };
 
 Dust.prototype.__cache = function () {
-	return this.dust.cache;
+		return this.dust.cache;
 };
 
 module.exports = Dust;

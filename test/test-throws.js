@@ -14,15 +14,15 @@ describe("bundalo Error conditions @errors@", function () {
 		);
 		done();
 	});
-	it("will throw an error with no engine", function (done) {
-		assert.throws(
-			function () {
-				var ret = new bundalo({"contentPath": "./"});
-			},
-			Error
-		);
-		done();
-	});
+//	it("will throw an error with no engine", function (done) {
+//		assert.throws(
+//			function () {
+//				var ret = new bundalo({"contentPath": "./"});
+//			},
+//			Error
+//		);
+//		done();
+//	});
 	it("will throw an error with non-existent engine", function (done) {
 		assert.throws(
 			function () {
