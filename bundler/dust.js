@@ -11,6 +11,8 @@ var Resolver = require('../lib/resolver');
 
 function Dust(config) {
 	this.dust = freshy.freshy('dustjs-linkedin');
+	//preserve whitespace
+	this.dust.optimizers.format = function(ctx, node) { return node };
 	this.resolver = new Resolver();
 	this.resolver.init(config);
 	this.doCache = (config.cache !== undefined && config.cache === false) ? false : true;
