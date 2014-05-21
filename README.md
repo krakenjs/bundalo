@@ -2,6 +2,8 @@
 
 Extract/cache/render property files/strings using i18n rules and various rendering engines
 
+[![Build Status](https://travis-ci.org/krakenjs/bundalo.svg?branch=master)](https://travis-ci.org/krakenjs/bundalo)
+
 ## Use cases
 
 ### Initialize bundalo
