@@ -33,7 +33,6 @@ var bundle2 = bundalo(config);
 
 ```
 
-```
 ### Use bundalo
 
 User wants key/values from some bundle file, corrected for locality, and possibly rendered with some data model
