@@ -24,7 +24,7 @@ var config = {
 var config2 = {
 	"contentPath": "globals/",
 	"fallback": "",
-	"engine: "none
+	"engine": "none"
 };
 
 //create two bundalo instances. Each has its own cache
