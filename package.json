@@ -14,7 +14,17 @@
     "node.js",
     "renderer"
   ],
-  "author": "@grawk",
+  "author": "Matt Edelman <medelman@paypal.com>",
+  "contributors": [
+    {
+      "name": "Chris Vaughan",
+      "email": "cvaughan@paypal.com"
+    },
+    {
+      "name": "Aria Stewart",
+      "email": "ariastewart@paypal.com"
+    }
+  ],
   "license": "http://www.apache.org/licenses/LICENSE-2.0",
   "bugs": {
     "url": "https://github.com/krakenjs/bundalo/issues"
