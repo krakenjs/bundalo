@@ -1,4 +1,6 @@
-# bundalo
+bundalo
+======
+Lead Maintainer: [Aria Stewart](https://github.com/aredridel)  
 
 Extract/cache/render property files/strings using i18n rules and various rendering engines
 
