@@ -20,10 +20,7 @@ var fs = require('fs');
 var spud = require('spud');
 var freshy = require('freshy');
 var loopalo = require('../lib/loopalo');
-//import dust here to get around issue in freshy where freshy.freshy doesn't properly check for an existing copy
-require('dustjs-linkedin');
 var Resolver = require('../lib/resolver');
-
 
 
 function Dust(config) {
