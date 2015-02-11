@@ -29,7 +29,7 @@ function Dust(config) {
 	this.dust.optimizers.format = function(ctx, node) { return node; };
 	this.resolver = new Resolver();
 	this.resolver.init(config);
-	this.doCache = (config.cache !== undefined && config.cache === false) ? false : true;
+	this.doCache = !!('cache' in config ? config.cache : true);
 }
 
 Dust.prototype.get = function (config, callback) {
@@ -38,7 +38,7 @@ Dust.prototype.get = function (config, callback) {
 	var that = this;
 	function dustRender(cacheKey, model, cb) {
 		that.dust.render(cacheKey, model || {}, function renderCallback(err, out) {
-			if (!(that.doCache)) {
+			if (!that.doCache) {
 				delete that.dust.cache[cacheKey];
 			}
 
