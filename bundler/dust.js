@@ -38,6 +38,10 @@ Dust.prototype.get = function (config, callback) {
 	var that = this;
 	function dustRender(cacheKey, model, cb) {
 		that.dust.render(cacheKey, model || {}, function renderCallback(err, out) {
+			if (err) {
+				return cb(err);
+			}
+
 			if (!that.doCache) {
 				delete that.dust.cache[cacheKey];
 			}
