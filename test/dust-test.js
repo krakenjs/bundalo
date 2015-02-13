@@ -4,6 +4,7 @@
 var dust = require('dustjs-linkedin');
 var bundalo = require("../index");
 var engine = "dust";
+var path = require('path');
 
 describe("bundalo dust bundler @dust@", function () {
 	it("should maintain one cache per instance", function (done) {
@@ -15,7 +16,10 @@ describe("bundalo dust bundler @dust@", function () {
 			'bundle': 'nest/dusta',
 			'locality': ''
 		}, function bundaloReturn(err, data) {
-			if (data.greeting && bundloo.__cache()['/nest/dusta.properties'] && !bundlee.__cache()['/nest/dusta.properties']) {
+            if (err) {
+                return done(err);
+            }
+			if (data.greeting && bundloo.__cache()[path.normalize('nest/dusta.properties')] && !bundlee.__cache()[path.normalize('nest/dusta.properties')]) {
 				done();
 			} else {
 				done(new Error("Kablooey"));
@@ -34,7 +38,7 @@ describe("bundalo dust bundler @dust@disableCache@", function () {
 			'locality': ''
 		}, function bundaloReturn(err, data) {
 			console.log(bundloo.__cache());
-			if (data.greeting && !bundloo.__cache()['/nest/dusta.properties']) {
+			if (data.greeting && !bundloo.__cache()[path.normalize('nest/dusta.properties')]) {
 				done();
 			} else {
 				done(new Error("Kablooey"));
@@ -57,7 +61,7 @@ describe("bundalo dust bundler, no locale @dust@nofallback@nolocale@", function 
 			'bundle': 'nest/dusta',
 			'locality': ''
 		}, function bundaloReturn(err, data) {
-			if (data.greeting && _bundalo.__cache()['/nest/dusta.properties']) {
+			if (data.greeting && _bundalo.__cache()[path.normalize('nest/dusta.properties')]) {
 				done();
 			} else {
 				done(new Error("life isn't what you thought it would be"));
@@ -69,7 +73,7 @@ describe("bundalo dust bundler, no locale @dust@nofallback@nolocale@", function 
 			'bundle': ['nest/dusta'],
 			'locality': ''
 		}, function bundaloReturn(err, data) {
-			if (data['nest/dusta'].greeting && _bundalo.__cache()['/nest/dusta.properties']) {
+			if (data['nest/dusta'].greeting && _bundalo.__cache()[path.normalize('nest/dusta.properties')]) {
 				done();
 			} else {
 				done(new Error("life isn't what you thought it would be"));
@@ -132,7 +136,7 @@ describe("bundalo dust bundler, existing locale @dust@nofallback@locale@", funct
 			'bundle': ['nest/dusta', 'nest/dustb'],
 			'locality': 'es-ES'
 		}, function bundaloReturn(err, data) {
-			if (data['nest/dusta'].greeting && data['nest/dustb'].signoff && _bundalo.__cache()['/ES/es/nest/dustb.properties']) {
+			if (data['nest/dusta'].greeting && data['nest/dustb'].signoff && _bundalo.__cache()[path.normalize('ES/es/nest/dustb.properties')]) {
 				done();
 			} else {
 				done(new Error("life isn't what you thought it would be"));

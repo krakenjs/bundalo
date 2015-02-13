@@ -14,7 +14,7 @@ describe("bundalo none bundler @none@", function () {
 			'bundle': 'nest/nonea',
 			'locality': ''
 		}, function bundaloReturn(err, data) {
-			if (data.greeting && bundloo.__cache()['/nest/nonea.properties'] && !bundlee.__cache()['/nest/nonea.properties']) {
+			if (data.greeting && bundloo.__cache()[path.normalize('nest/nonea.properties')] && !bundlee.__cache()[path.normalize('nest/nonea.properties')]) {
 				done();
 			} else {
 				done(new Error("Kablamo"));
@@ -32,8 +32,7 @@ describe("bundalo none bundler @none@disableCache@", function () {
 			'bundle': 'nest/nonea',
 			'locality': ''
 		}, function bundaloReturn(err, data) {
-			console.log(bundloo.__cache());
-			if (data.greeting && !bundloo.__cache()['/nest/nonea.properties']) {
+			if (data.greeting && !bundloo.__cache()[path.normalize('nest/nonea.properties')]) {
 				done();
 			} else {
 				done(new Error("Kablooey"));
@@ -56,7 +55,7 @@ describe("bundalo none bundler, no locale @none@nofallback@", function () {
 			'bundle': 'nest/nonea',
 			'locality': ''
 		}, function bundaloReturn(err, data) {
-			if (data.greeting && _bundalo.__cache()['/nest/nonea.properties']) {
+			if (data.greeting && _bundalo.__cache()[path.normalize('nest/nonea.properties')]) {
 				done();
 			} else {
 				done(new Error("life isn't what you thought it would be"));
@@ -118,7 +117,7 @@ describe("bundalo none bundler, existing locale @none@nofallback@", function () 
 			'bundle': ['nest/nonea', 'nest/noneb'],
 			'locality': 'es-ES'
 		}, function bundaloReturn(err, data) {
-			if (data['nest/nonea'].greeting && data['nest/noneb'].signoff && _bundalo.__cache()['/ES/es/nest/noneb.properties']) {
+			if (data['nest/nonea'].greeting && data['nest/noneb'].signoff && _bundalo.__cache()[path.normalize('ES/es/nest/noneb.properties')]) {
 				done();
 			} else {
 				done(new Error("life isn't what you thought it would be"));

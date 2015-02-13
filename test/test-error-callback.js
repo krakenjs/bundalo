@@ -22,7 +22,7 @@ describe('bundalo Error callback @callback-errors@', function () {
 
 	it('will gracefully callback with an EISDIR if the locale does not exist', function (done) {
 		bundalo({
-			contentPath: path.join(process.cwd(), 'test', 'fixture', 'locales'),
+			contentPath: path.resolve(__dirname, 'fixture', 'locales'),
 			engine: engine
 		}).get({
 			bundle: 'dusta',
