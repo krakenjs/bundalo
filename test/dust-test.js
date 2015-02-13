@@ -37,7 +37,6 @@ describe("bundalo dust bundler @dust@disableCache@", function () {
 			'bundle': 'nest/dusta',
 			'locality': ''
 		}, function bundaloReturn(err, data) {
-			console.log(bundloo.__cache());
 			if (data.greeting && !bundloo.__cache()[path.normalize('nest/dusta.properties')]) {
 				done();
 			} else {
@@ -181,7 +180,6 @@ describe("bundalo dust bundler, fallback locale @dust@fallback@", function () {
 			'model': {'name': 'Friend'}
 		}, function bundaloReturn(err, data) {
 			if (data.greeting) {
-				console.log(data.greeting);
 				done();
 			} else {
 				done(new Error("life isn't what you thought it would be"));

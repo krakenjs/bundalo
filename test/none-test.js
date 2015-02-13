@@ -159,7 +159,6 @@ describe("bundalo none bundler, fallback locale @none@fallback@", function () {
 			'bundle': 'nest/nonea'
 		}, function bundaloReturn(err, data) {
 			if (data.greeting) {
-				console.log("data.greeting", data.greeting);
 				done();
 			} else {
 				done(new Error("life isn't what you thought it would be"));
