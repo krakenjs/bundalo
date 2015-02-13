@@ -8,7 +8,7 @@ var path = require('path');
 
 describe("bundalo dust bundler @dust@", function () {
 	it("should maintain one cache per instance", function (done) {
-		var contentPath =  process.cwd() + "/test/fixture/nolocale";
+		var contentPath =  path.join(__dirname, "fixture", "nolocale");
 		var fallback =  "";
 		var bundloo = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback});
 		var bundlee = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback});
@@ -30,7 +30,7 @@ describe("bundalo dust bundler @dust@", function () {
 
 describe("bundalo dust bundler @dust@disableCache@", function () {
 	it("should not maintain cache", function (done) {
-		var contentPath =  process.cwd() + "/test/fixture/nolocale";
+		var contentPath =  path.join(__dirname, "fixture", "nolocale");
 		var fallback =  "";
 		var bundloo = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback, "cache": false});
 		bundloo.get({
@@ -47,7 +47,7 @@ describe("bundalo dust bundler @dust@disableCache@", function () {
 });
 
 describe("bundalo dust bundler, no locale @dust@nofallback@nolocale@", function () {
-	var contentPath = process.cwd() + "/test/fixture/nolocale";
+	var contentPath = path.join(__dirname, "fixture", "nolocale");
 	var fallback = "";
 	var _bundalo;
 	before(function () {

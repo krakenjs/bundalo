@@ -1,12 +1,12 @@
 /* global describe, it, before */
 'use strict';
-//var dustjs = require("dustjs-linkedin");
 var bundalo = require("../index");
 var engine = "none";
+var path = require('path');
 
 describe("bundalo none bundler @none@", function () {
 	it("should maintain one cache per instance", function (done) {
-		var contentPath =  process.cwd() + "/test/fixture/nolocale";
+		var contentPath = path.join(__dirname, 'fixture', 'nolocale');
 		var fallback =  "";
 		var bundloo = bundalo({"contentPath": contentPath, "fallback": fallback});
 		var bundlee = bundalo({"contentPath": contentPath, "fallback": fallback});
@@ -25,7 +25,7 @@ describe("bundalo none bundler @none@", function () {
 
 describe("bundalo none bundler @none@disableCache@", function () {
 	it("should not maintain cache", function (done) {
-		var contentPath =  process.cwd() + "/test/fixture/nolocale";
+		var contentPath = path.join(__dirname, 'fixture', 'nolocale');
 		var fallback =  "";
 		var bundloo = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback, "cache": false});
 		bundloo.get({
@@ -42,7 +42,7 @@ describe("bundalo none bundler @none@disableCache@", function () {
 });
 
 describe("bundalo none bundler, no locale @none@nofallback@", function () {
-	var contentPath =  process.cwd() + "/test/fixture/nolocale";
+	var contentPath = path.join(__dirname, 'fixture', 'nolocale');
 	var fallback =  "";
 	var _bundalo;
 	before(function () {
@@ -93,7 +93,7 @@ describe("bundalo none bundler, no locale @none@nofallback@", function () {
 //
 //
 describe("bundalo none bundler, existing locale @none@nofallback@", function () {
-	var contentPath =  process.cwd() + "/test/fixture/locales";
+	var contentPath = path.join(__dirname, "fixture", "locales");
 	var fallback =  "en-US";
 	var _bundalo;
 	before(function () {
@@ -142,7 +142,7 @@ describe("bundalo none bundler, existing locale @none@nofallback@", function () 
 });
 
 describe("bundalo none bundler, fallback locale @none@fallback@", function () {
-	var contentPath = process.cwd() + "/test/fixture/locales";
+	var contentPath = path.join(__dirname, "fixture", "locales");
 	var fallback = "en-US";
 	var locality = "fr-FR";
 	var _bundalo;

@@ -36,7 +36,7 @@ describe('bundalo Error callback @callback-errors@', function () {
 
 	it('will gracefully callback with an EISDIR if the bundle does not exist in the contentPath', function (done) {
 		bundalo({
-			contentPath: path.join(process.cwd(), 'test', 'fixture', 'locales'),
+			contentPath: path.join(__dirname, 'fixture', 'locales'),
 			engine: engine
 		}).get({
 			bundle: Math.random().toString(),
@@ -50,7 +50,7 @@ describe('bundalo Error callback @callback-errors@', function () {
 
 	it('will gracefully callback with an error if there was a Dust syntax error', function (done) {
 		bundalo({
-			contentPath: path.join(process.cwd(), 'test', 'fixture', 'locales'),
+			contentPath: path.join(__dirname, 'fixture', 'locales'),
 			engine: engine
 		}).get({
 			bundle: 'dustbad',
