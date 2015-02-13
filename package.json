@@ -44,7 +44,7 @@
     "dustjs-linkedin": "~2.5.0",
     "spud": "^1.1.1",
     "file-resolver": "^1.0.0",
-    "freshy": "^0.0.1",
+    "freshy": "^1.0.0",
     "async": "^0.2.0",
     "lodash": "^2.4.0"
   }
