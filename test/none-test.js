@@ -105,7 +105,9 @@ describe("bundalo none bundler, existing locale @none@nofallback@", function () 
 			'bundle': 'nest/nonea',
 			'locality': 'es-ES'
 		}, function bundaloReturn(err, data) {
-			if (data.greeting) {
+            if (err) {
+                return done(err);
+            } else if (data.greeting) {
 				done();
 			} else {
 				done(new Error("life isn't what you thought it would be"));
