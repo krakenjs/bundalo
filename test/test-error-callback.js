@@ -28,8 +28,10 @@ describe('bundalo Error callback @callback-errors@', function () {
 			bundle: 'dusta',
 			locality: 'ab-CD'
 		}, function (err) {
-			assert.equal(err.name, 'Error');
-			assert.ok(err.message.indexOf('EISDIR') === 0);
+			if (process.platform !== 'win32' && process.platform !== 'win64') {
+				assert.equal(err.name, 'Error');
+				assert.ok(err.message.indexOf('EISDIR') === 0);
+            }
 			done();
 		});
 	});	
@@ -42,8 +44,10 @@ describe('bundalo Error callback @callback-errors@', function () {
 			bundle: Math.random().toString(),
 			locality: 'en-US'
 		}, function (err) {
-			assert.equal(err.name, 'Error');
-			assert.ok(err.message.indexOf('EISDIR') === 0);
+			if (process.platform !== 'win32' && process.platform !== 'win64') {
+				assert.equal(err.name, 'Error');
+				assert.ok(err.message.indexOf('EISDIR') === 0);
+            }
 			done();
 		});
 	});	
