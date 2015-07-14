@@ -40,13 +40,16 @@ None.prototype.get = function (config, callback) {
 			return;
 		}
 		//not yet in cache
-		fs.readFile(bundleFile, {}, iferr(callback, function handleBundleBuffer(bundleBuffer) {
-			spud.deserialize(bundleBuffer, 'properties', iferr(callback, function (bundleJSON) {
+		fs.readFile(bundleFile, iferr(callback, function handleBundleBuffer(bundleBuffer) {
+			try {
+				var parsed = spud.parse(bundleBuffer.toString());
 				if (that.doCache) {
-					that.cache[cacheKey] = bundleJSON;
+					that.cache[cacheKey] = parsed;
 				}
-				cb(null, bundleJSON);
-			}));
+				cb(null, parsed);
+			} catch (e) {
+				cb(e);
+			}
 		}));
 	}
 
