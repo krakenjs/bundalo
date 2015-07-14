@@ -20,6 +20,7 @@ var fs = require('fs');
 var spud = require('spud');
 var loopalo = require('../lib/loopalo');
 var Resolver = require('../lib/resolver');
+var iferr = require('iferr');
 
 
 function None(config) {
@@ -38,13 +39,16 @@ None.prototype.get = function (config, callback) {
 			return;
 		}
 		//not yet in cache
-		fs.readFile(bundleFile, {}, function handleBundleBuffer(err, bundleBuffer) {
-			spud.deserialize(bundleBuffer, 'properties', function (err, bundleJSON) {
-				(that.doCache) ? (that.cache[cacheKey] = bundleJSON) : "";
+		fs.readFile(bundleFile, {}, iferr(callback, function handleBundleBuffer(bundleBuffer) {
+			spud.deserialize(bundleBuffer, 'properties', iferr(callback, function (bundleJSON) {
+				if (that.doCache) {
+					that.cache[cacheKey] = bundleJSON;
+				}
 				cb(null, bundleJSON);
-			});
-		});
-	};
+			}));
+		}));
+	}
+
 	loopalo(config, this.resolver, noneBundler, callback);
 };
 

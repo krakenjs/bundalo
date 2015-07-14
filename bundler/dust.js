@@ -21,6 +21,7 @@ var spud = require('spud');
 var freshy = require('freshy');
 var loopalo = require('../lib/loopalo');
 var Resolver = require('../lib/resolver');
+var iferr = require('iferr');
 
 
 function Dust(config) {
@@ -37,17 +38,13 @@ Dust.prototype.get = function (config, callback) {
 	//multiple bundle config {"bundle": ["errors/server", "errors/client"], "model": {"name": "Will Robinson"}}
 	var that = this;
 	function dustRender(cacheKey, model, cb) {
-		that.dust.render(cacheKey, model || {}, function renderCallback(err, out) {
-			if (err) {
-				return cb(err);
-			}
-
+		that.dust.render(cacheKey, model || {}, iferr(cb, function renderCallback(out) {
 			if (!that.doCache) {
 				delete that.dust.cache[cacheKey];
 			}
 
 			spud.deserialize(new Buffer(out, 'utf8'), 'properties', cb);
-		});
+		}));
 	}
 
 	function dustBundler(bundleFile, cacheKey, cb) {
@@ -56,11 +53,7 @@ Dust.prototype.get = function (config, callback) {
 		}
 
 		//not yet in cache
-		fs.readFile(bundleFile, {}, function handleBundleBuffer(err, bundleBuffer) {
-			if (err) {
-				return cb(err);
-			}
-
+		fs.readFile(bundleFile, {}, iferr(cb, function handleBundleBuffer(bundleBuffer) {
 			try {
 				var compiled = that.dust.compile(bundleBuffer.toString(), cacheKey);
 				that.dust.loadSource(compiled);
@@ -68,7 +61,7 @@ Dust.prototype.get = function (config, callback) {
 			} catch (dustErr) {
 				return cb(dustErr);
 			}
-		});
+		}));
 	}
 
 
