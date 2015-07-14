@@ -28,8 +28,7 @@ function Dust(config) {
 	this.dust = freshy.freshy('dustjs-linkedin');
 	//preserve whitespace
 	this.dust.optimizers.format = function(ctx, node) { return node; };
-	this.resolver = new Resolver();
-	this.resolver.init(config);
+	this.resolver = new Resolver(config);
 	this.doCache = !!('cache' in config ? config.cache : true);
 }
 

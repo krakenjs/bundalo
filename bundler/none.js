@@ -24,8 +24,7 @@ var iferr = require('iferr');
 
 
 function None(config) {
-	this.resolver = new Resolver();
-	this.resolver.init(config);
+	this.resolver = new Resolver(config);
 	this.doCache = (config.cache !== undefined && config.cache === false) ? false : true;
 	this.cache = {};
 };
