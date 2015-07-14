@@ -4,6 +4,7 @@
   "description": "Extract/cache/render property files/strings using i18n rules and various rendering engines",
   "main": "index.js",
   "scripts": {
+    "pretest": "eslint .",
     "test": "grunt test"
   },
   "repository": {
@@ -33,11 +34,7 @@
   "devDependencies": {
     "chai": "~1.5.0",
     "dustjs-helpers": "~1.5.0",
-    "grunt": "~0.4.1",
-    "grunt-cli": "^0.1.13",
-    "grunt-contrib-jshint": "~0.7.0",
-    "grunt-mocha-test": "~0.7.0",
-    "jshint": "~2.4.3",
+    "eslint": "^0.24.1",
     "mocha": "~1.9.0"
   },
   "dependencies": {

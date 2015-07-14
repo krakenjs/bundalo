@@ -1,24 +1,23 @@
 /* global describe, it, before */
+/*eslint no-underscore-dangle: 0*/
 'use strict';
-//var dustjs = require("dustjs-linkedin");
-var dust = require('dustjs-linkedin');
 var bundalo = require("../index");
 var engine = "dust";
 var path = require('path');
 
 describe("bundalo dust bundler @dust@", function () {
 	it("should maintain one cache per instance", function (done) {
-		var contentPath =  path.join(__dirname, "fixture", "nolocale");
-		var fallback =  "";
+		var contentPath = path.join(__dirname, "fixture", "nolocale");
+		var fallback = "";
 		var bundloo = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback});
 		var bundlee = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback});
 		bundloo.get({
 			'bundle': 'nest/dusta',
 			'locality': ''
 		}, function bundaloReturn(err, data) {
-            if (err) {
-                return done(err);
-            }
+			if (err) {
+				return done(err);
+			}
 			if (data.greeting && bundloo.__cache()[path.normalize('nest/dusta.properties')] && !bundlee.__cache()[path.normalize('nest/dusta.properties')]) {
 				done();
 			} else {
@@ -30,13 +29,16 @@ describe("bundalo dust bundler @dust@", function () {
 
 describe("bundalo dust bundler @dust@disableCache@", function () {
 	it("should not maintain cache", function (done) {
-		var contentPath =  path.join(__dirname, "fixture", "nolocale");
-		var fallback =  "";
+		var contentPath = path.join(__dirname, "fixture", "nolocale");
+		var fallback = "";
 		var bundloo = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback, "cache": false});
 		bundloo.get({
 			'bundle': 'nest/dusta',
 			'locality': ''
 		}, function bundaloReturn(err, data) {
+			if (err) {
+				return done(err);
+			}
 			if (data.greeting && !bundloo.__cache()[path.normalize('nest/dusta.properties')]) {
 				done();
 			} else {
@@ -60,6 +62,9 @@ describe("bundalo dust bundler, no locale @dust@nofallback@nolocale@", function 
 			'bundle': 'nest/dusta',
 			'locality': ''
 		}, function bundaloReturn(err, data) {
+			if (err) {
+				return done(err);
+			}
 			if (data.greeting && _bundalo.__cache()[path.normalize('nest/dusta.properties')]) {
 				done();
 			} else {
@@ -72,6 +77,9 @@ describe("bundalo dust bundler, no locale @dust@nofallback@nolocale@", function 
 			'bundle': ['nest/dusta'],
 			'locality': ''
 		}, function bundaloReturn(err, data) {
+			if (err) {
+				return done(err);
+			}
 			if (data['nest/dusta'].greeting && _bundalo.__cache()[path.normalize('nest/dusta.properties')]) {
 				done();
 			} else {
@@ -84,6 +92,9 @@ describe("bundalo dust bundler, no locale @dust@nofallback@nolocale@", function 
 			'bundle': ['nest/dusta', 'nest/dustb'],
 			'locality': ''
 		}, function bundaloReturn(err, data) {
+			if (err) {
+				return done(err);
+			}
 			if (data['nest/dusta'].greeting && data['nest/dustb'].signoff) {
 				done();
 			} else {
@@ -99,6 +110,9 @@ describe("bundalo dust bundler, no locale @dust@nofallback@nolocale@", function 
 			},
 			'locality': ''
 		}, function bundaloReturn(err, data) {
+			if (err) {
+				return done(err);
+			}
 			if (data.dusta.greeting && data.dustb.signoff) {
 				done();
 			} else {
@@ -123,6 +137,9 @@ describe("bundalo dust bundler, existing locale @dust@nofallback@locale@", funct
 			'bundle': 'nest/dusta',
 			'locality': 'es-ES'
 		}, function bundaloReturn(err, data) {
+			if (err) {
+				return done(err);
+			}
 			if (data.greeting) {
 				done();
 			} else {
@@ -135,6 +152,9 @@ describe("bundalo dust bundler, existing locale @dust@nofallback@locale@", funct
 			'bundle': ['nest/dusta', 'nest/dustb'],
 			'locality': 'es-ES'
 		}, function bundaloReturn(err, data) {
+			if (err) {
+				return done(err);
+			}
 			if (data['nest/dusta'].greeting && data['nest/dustb'].signoff && _bundalo.__cache()[path.normalize('ES/es/nest/dustb.properties')]) {
 				done();
 			} else {
@@ -150,6 +170,9 @@ describe("bundalo dust bundler, existing locale @dust@nofallback@locale@", funct
 			},
 			'locality': 'es-ES'
 		}, function bundaloReturn(err, data) {
+			if (err) {
+				return done(err);
+			}
 			if (data.dusta.greeting && data.dustb.signoff) {
 				done();
 			} else {
@@ -179,6 +202,9 @@ describe("bundalo dust bundler, fallback locale @dust@fallback@", function () {
 			'bundle': 'nest/dusta',
 			'model': {'name': 'Friend'}
 		}, function bundaloReturn(err, data) {
+			if (err) {
+				return done(err);
+			}
 			if (data.greeting) {
 				done();
 			} else {
@@ -190,6 +216,9 @@ describe("bundalo dust bundler, fallback locale @dust@fallback@", function () {
 		_bundalo.get({
 			'bundle': ['nest/dusta', 'nest/dustb']
 		}, function bundaloReturn(err, data) {
+			if (err) {
+				return done(err);
+			}
 			if (data['nest/dusta'].greeting && data['nest/dustb'].signoff) {
 				done();
 			} else {
@@ -204,6 +233,9 @@ describe("bundalo dust bundler, fallback locale @dust@fallback@", function () {
 				'dustb': 'nest/dustb'
 			}
 		}, function bundaloReturn(err, data) {
+			if (err) {
+				return done(err);
+			}
 			if (data.dusta.greeting && data.dustb.signoff) {
 				done();
 			} else {
