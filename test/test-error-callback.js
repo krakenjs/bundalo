@@ -34,7 +34,7 @@ describe('bundalo Error callback @callback-errors@', function () {
             }
 			done();
 		});
-	});	
+	});
 
 	it('will gracefully callback with an EISDIR if the bundle does not exist in the contentPath', function (done) {
 		bundalo({
@@ -50,7 +50,7 @@ describe('bundalo Error callback @callback-errors@', function () {
             }
 			done();
 		});
-	});	
+	});
 
 	it('will gracefully callback with an error if there was a Dust syntax error', function (done) {
 		bundalo({

@@ -17,6 +17,8 @@
  \*───────────────────────────────────────────────────────────────────────────*/
 'use strict';
 
+var VError = require('verror');
+
 function bundalo(config) {
 	var Bundler;
 	var engine = config.engine || 'none';
@@ -26,7 +28,7 @@ function bundalo(config) {
 	try {
 		Bundler = require("./bundler/" + engine);
 	} catch (err) {
-		throw new Error("[bundalo] Please provide a valid engine property on the config parameter");
+		throw new VError(err, "[bundalo] Please provide a valid engine property on the config parameter");
 	}
 	return new Bundler(config);
 }

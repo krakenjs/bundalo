@@ -15,19 +15,21 @@
  │   See the License for the specific language governing permissions and       │
  │   limitations under the License.                                            │
  \*───────────────────────────────────────────────────────────────────────────*/
+
+/*eslint no-underscore-dangle:0*/
 'use strict';
 var fs = require('fs');
 var spud = require('spud');
 var loopalo = require('../lib/loopalo');
 var Resolver = require('../lib/resolver');
+var iferr = require('iferr');
 
 
 function None(config) {
-	this.resolver = new Resolver();
-	this.resolver.init(config);
+	this.resolver = new Resolver(config);
 	this.doCache = (config.cache !== undefined && config.cache === false) ? false : true;
 	this.cache = {};
-};
+}
 
 None.prototype.get = function (config, callback) {
 	var that = this;
@@ -38,13 +40,16 @@ None.prototype.get = function (config, callback) {
 			return;
 		}
 		//not yet in cache
-		fs.readFile(bundleFile, {}, function handleBundleBuffer(err, bundleBuffer) {
-			spud.deserialize(bundleBuffer, 'properties', function (err, bundleJSON) {
-				(that.doCache) ? (that.cache[cacheKey] = bundleJSON) : "";
+		fs.readFile(bundleFile, {}, iferr(callback, function handleBundleBuffer(bundleBuffer) {
+			spud.deserialize(bundleBuffer, 'properties', iferr(callback, function (bundleJSON) {
+				if (that.doCache) {
+					that.cache[cacheKey] = bundleJSON;
+				}
 				cb(null, bundleJSON);
-			});
-		});
-	};
+			}));
+		}));
+	}
+
 	loopalo(config, this.resolver, noneBundler, callback);
 };
 
