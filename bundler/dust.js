@@ -44,7 +44,11 @@ Dust.prototype.get = function (config, callback) {
 				delete that.dust.cache[cacheKey];
 			}
 
-			spud.deserialize(new Buffer(out, 'utf8'), 'properties', cb);
+			try {
+				cb(null, spud.parse(out));
+			} catch (e) {
+				cb(e);
+			}
 		}));
 	}
 
@@ -54,7 +58,7 @@ Dust.prototype.get = function (config, callback) {
 		}
 
 		//not yet in cache
-		fs.readFile(bundleFile, {}, iferr(cb, function handleBundleBuffer(bundleBuffer) {
+		fs.readFile(bundleFile, iferr(cb, function handleBundleBuffer(bundleBuffer) {
 			try {
 				var compiled = that.dust.compile(bundleBuffer.toString(), cacheKey);
 				that.dust.loadSource(compiled);
