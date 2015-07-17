@@ -4,6 +4,7 @@
 var bundalo = require("../index");
 var engine = "dust";
 var path = require('path');
+var assert = require('assert');
 
 describe("bundalo dust bundler @dust@", function () {
 	it("should maintain one cache per instance", function (done) {
@@ -18,10 +19,13 @@ describe("bundalo dust bundler @dust@", function () {
 			if (err) {
 				return done(err);
 			}
-			if (data.greeting && bundloo.__cache()[path.normalize('nest/dusta.properties')] && !bundlee.__cache()[path.normalize('nest/dusta.properties')]) {
+			try {
+				assert.ok(data.greeting);
+				assert.ok(bundloo.__cache()[path.normalize('nest/dusta.properties')]);
+				assert.ok(!bundlee.__cache()[path.normalize('nest/dusta.properties')]);
 				done();
-			} else {
-				done(new Error("Kablooey"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -39,10 +43,12 @@ describe("bundalo dust bundler @dust@disableCache@", function () {
 			if (err) {
 				return done(err);
 			}
-			if (data.greeting && !bundloo.__cache()[path.normalize('nest/dusta.properties')]) {
+			try {
+				assert.ok(data.greeting);
+				assert.ok(!bundloo.__cache()[path.normalize('nest/dusta.properties')]);
 				done();
-			} else {
-				done(new Error("Kablooey"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -65,10 +71,12 @@ describe("bundalo dust bundler, no locale @dust@nofallback@nolocale@", function 
 			if (err) {
 				return done(err);
 			}
-			if (data.greeting && _bundalo.__cache()[path.normalize('nest/dusta.properties')]) {
+			try {
+				assert.ok(data.greeting);
+				assert.ok(_bundalo.__cache()[path.normalize('nest/dusta.properties')]);
 				done();
-			} else {
-				done(new Error("life isn't what you thought it would be"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -80,10 +88,12 @@ describe("bundalo dust bundler, no locale @dust@nofallback@nolocale@", function 
 			if (err) {
 				return done(err);
 			}
-			if (data['nest/dusta'].greeting && _bundalo.__cache()[path.normalize('nest/dusta.properties')]) {
+			try {
+				assert.ok(data['nest/dusta'].greeting);
+				assert.ok(_bundalo.__cache()[path.normalize('nest/dusta.properties')]);
 				done();
-			} else {
-				done(new Error("life isn't what you thought it would be"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -95,10 +105,12 @@ describe("bundalo dust bundler, no locale @dust@nofallback@nolocale@", function 
 			if (err) {
 				return done(err);
 			}
-			if (data['nest/dusta'].greeting && data['nest/dustb'].signoff) {
+			try {
+				assert.ok(data['nest/dusta'].greeting);
+				assert.ok(data['nest/dustb'].signoff);
 				done();
-			} else {
-				done(new Error("life isn't what you thought it would be"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -113,10 +125,12 @@ describe("bundalo dust bundler, no locale @dust@nofallback@nolocale@", function 
 			if (err) {
 				return done(err);
 			}
-			if (data.dusta.greeting && data.dustb.signoff) {
+			try {
+				assert.ok(data.dusta.greeting);
+				assert.ok( data.dustb.signoff);
 				done();
-			} else {
-				done(new Error("life isn't what you thought it would be"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -140,10 +154,11 @@ describe("bundalo dust bundler, existing locale @dust@nofallback@locale@", funct
 			if (err) {
 				return done(err);
 			}
-			if (data.greeting) {
+			try {
+				assert.ok(data.greeting);
 				done();
-			} else {
-				done(new Error("life isn't what you thought it would be"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -155,10 +170,13 @@ describe("bundalo dust bundler, existing locale @dust@nofallback@locale@", funct
 			if (err) {
 				return done(err);
 			}
-			if (data['nest/dusta'].greeting && data['nest/dustb'].signoff && _bundalo.__cache()[path.normalize('ES/es/nest/dustb.properties')]) {
+			try {
+				assert.ok(data['nest/dusta'].greeting);
+				assert.ok(data['nest/dustb'].signoff);
+				assert.ok(_bundalo.__cache()[path.normalize('ES/es/nest/dustb.properties')]);
 				done();
-			} else {
-				done(new Error("life isn't what you thought it would be"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -173,10 +191,12 @@ describe("bundalo dust bundler, existing locale @dust@nofallback@locale@", funct
 			if (err) {
 				return done(err);
 			}
-			if (data.dusta.greeting && data.dustb.signoff) {
+			try {
+				assert.ok(data.dusta.greeting);
+				assert.ok( data.dustb.signoff);
 				done();
-			} else {
-				done(new Error("life isn't what you thought it would be"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -205,10 +225,11 @@ describe("bundalo dust bundler, fallback locale @dust@fallback@", function () {
 			if (err) {
 				return done(err);
 			}
-			if (data.greeting) {
+			try {
+				assert.ok(data.greeting);
 				done();
-			} else {
-				done(new Error("life isn't what you thought it would be"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -219,10 +240,12 @@ describe("bundalo dust bundler, fallback locale @dust@fallback@", function () {
 			if (err) {
 				return done(err);
 			}
-			if (data['nest/dusta'].greeting && data['nest/dustb'].signoff) {
+			try {
+				assert.ok(data['nest/dusta'].greeting);
+				assert.ok(data['nest/dustb'].signoff);
 				done();
-			} else {
-				done(new Error("life isn't what you thought it would be"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -236,10 +259,12 @@ describe("bundalo dust bundler, fallback locale @dust@fallback@", function () {
 			if (err) {
 				return done(err);
 			}
-			if (data.dusta.greeting && data.dustb.signoff) {
+			try {
+				assert.ok(data.dusta.greeting);
+				assert.ok(data.dustb.signoff);
 				done();
-			} else {
-				done(new Error("life isn't what you thought it would be"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
