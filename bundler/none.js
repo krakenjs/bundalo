@@ -23,6 +23,7 @@ var spud = require('spud');
 var loopalo = require('../lib/loopalo');
 var Resolver = require('../lib/resolver');
 var iferr = require('iferr');
+var async = require('async');
 
 
 function None(config) {
@@ -36,7 +37,7 @@ None.prototype.get = function (config, callback) {
 
 	function noneBundler(bundleFile, cacheKey, cb) {
 		if (that.cache && that.cache[cacheKey]) {
-			cb(null, that.cache[cacheKey]);
+			async.ensureAsync(cb(null, that.cache[cacheKey]));
 			return;
 		}
 		//not yet in cache
