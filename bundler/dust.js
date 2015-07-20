@@ -70,7 +70,7 @@ Dust.prototype.get = function (config, callback) {
 	}
 
 
-	loopalo(config, this.resolver, dustBundler, callback);
+	loopalo(config.bundle, config, this.resolver, dustBundler, callback);
 };
 
 Dust.prototype.__cache = function () {

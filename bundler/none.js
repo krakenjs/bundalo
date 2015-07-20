@@ -53,7 +53,7 @@ None.prototype.get = function (config, callback) {
 		}));
 	}
 
-	loopalo(config, this.resolver, noneBundler, callback);
+	loopalo(config.bundle, config, this.resolver, noneBundler, callback);
 };
 
 None.prototype.__cache = function () {
