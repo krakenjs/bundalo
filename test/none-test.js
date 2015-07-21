@@ -4,6 +4,7 @@
 var bundalo = require("../index");
 var engine = "none";
 var path = require('path');
+var assert = require('assert');
 
 describe("bundalo none bundler @none@", function () {
 	it("should maintain one cache per instance", function (done) {
@@ -19,10 +20,13 @@ describe("bundalo none bundler @none@", function () {
 				return done(err);
 			}
 
-			if (data.greeting && bundloo.__cache()[path.normalize('nest/nonea.properties')] && !bundlee.__cache()[path.normalize('nest/nonea.properties')]) {
+			try {
+				assert(data.greeting);
+				assert(bundloo.__cache()[path.normalize('nest/nonea.properties')]);
+				assert(!bundlee.__cache()[path.normalize('nest/nonea.properties')]);
 				done();
-			} else {
-				done(new Error("Kablamo"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -40,10 +44,12 @@ describe("bundalo none bundler @none@disableCache@", function () {
 			if (err) {
 				return done(err);
 			}
-			if (data.greeting && !bundloo.__cache()[path.normalize('nest/nonea.properties')]) {
+			try {
+				assert(data.greeting);
+				assert(!bundloo.__cache()[path.normalize('nest/nonea.properties')]);
 				done();
-			} else {
-				done(new Error("Kablooey"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -66,10 +72,12 @@ describe("bundalo none bundler, no locale @none@nofallback@", function () {
 			if (err) {
 				return done(err);
 			}
-			if (data.greeting && _bundalo.__cache()[path.normalize('nest/nonea.properties')]) {
+			try {
+				assert(data.greeting);
+				assert(_bundalo.__cache()[path.normalize('nest/nonea.properties')]);
 				done();
-			} else {
-				done(new Error("life isn't what you thought it would be"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -81,10 +89,12 @@ describe("bundalo none bundler, no locale @none@nofallback@", function () {
 			if (err) {
 				return done(err);
 			}
-			if (data['nest/nonea'].greeting && data['nest/noneb'].signoff) {
+			try {
+				assert(data['nest/nonea'].greeting);
+				assert(data['nest/noneb'].signoff);
 				done();
-			} else {
-				done(new Error("life isn't what you thought it would be"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -99,10 +109,12 @@ describe("bundalo none bundler, no locale @none@nofallback@", function () {
 			if (err) {
 				return done(err);
 			}
-			if (data.nonea.greeting && data.noneb.signoff) {
+			try {
+				assert(data.nonea.greeting);
+				assert(data.noneb.signoff);
 				done();
-			} else {
-				done(new Error("life isn't what you thought it would be"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -124,10 +136,13 @@ describe("bundalo none bundler, existing locale @none@nofallback@", function () 
 		}, function bundaloReturn(err, data) {
 			if (err) {
 				return done(err);
-			} else if (data.greeting) {
+			}
+
+			try {
+				assert(data.greeting);
 				done();
-			} else {
-				done(new Error("life isn't what you thought it would be"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -139,10 +154,13 @@ describe("bundalo none bundler, existing locale @none@nofallback@", function () 
 			if (err) {
 				return done(err);
 			}
-			if (data['nest/nonea'].greeting && data['nest/noneb'].signoff && _bundalo.__cache()[path.normalize('ES/es/nest/noneb.properties')]) {
+			try {
+				assert(data['nest/nonea'].greeting);
+				assert(data['nest/noneb'].signoff);
+				assert(_bundalo.__cache()[path.normalize('ES/es/nest/noneb.properties')]);
 				done();
-			} else {
-				done(new Error("life isn't what you thought it would be"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -157,10 +175,12 @@ describe("bundalo none bundler, existing locale @none@nofallback@", function () 
 			if (err) {
 				return done(err);
 			}
-			if (data.nonea.greeting && data.noneb.signoff) {
+			try {
+				assert(data.nonea.greeting);
+				assert(data.noneb.signoff);
 				done();
-			} else {
-				done(new Error("life isn't what you thought it would be"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -186,10 +206,11 @@ describe("bundalo none bundler, fallback locale @none@fallback@", function () {
 			if (err) {
 				return done(err);
 			}
-			if (data.greeting) {
+			try {
+				assert(data.greeting);
 				done();
-			} else {
-				done(new Error("life isn't what you thought it would be"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -200,10 +221,13 @@ describe("bundalo none bundler, fallback locale @none@fallback@", function () {
 			if (err) {
 				return done(err);
 			}
-			if (data['nest/nonea'].greeting && data['nest/noneb'].signoff) {
+
+			try {
+				assert(data['nest/nonea'].greeting);
+				assert(data['nest/noneb'].signoff);
 				done();
-			} else {
-				done(new Error("life isn't what you thought it would be"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
@@ -217,10 +241,12 @@ describe("bundalo none bundler, fallback locale @none@fallback@", function () {
 			if (err) {
 				return done(err);
 			}
-			if (data.nonea.greeting && data.noneb.signoff) {
+			try {
+				assert(data.nonea.greeting);
+				assert(data.noneb.signoff);
 				done();
-			} else {
-				done(new Error("life isn't what you thought it would be"));
+			} catch (e) {
+				done(e);
 			}
 		});
 	});
