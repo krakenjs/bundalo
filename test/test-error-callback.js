@@ -12,13 +12,14 @@ describe('bundalo Error callback @callback-errors@', function () {
 			bundle: 'nonea',
 			locality: 'en-US'
 		}, function (err) {
+			assert.ok(err);
 			assert.equal(err.name, 'Error');
 			assert.ok(err.message.indexOf('ENOENT') === 0);
 			done();
 		});
 	});
 
-	it('will gracefully callback with an EISDIR if the locale does not exist', function (done) {
+	it('will gracefully callback with an ENOENT if the locale does not exist', function (done) {
 		bundalo({
 			contentPath: path.resolve(__dirname, 'fixture', 'locales')
 		}).get({
@@ -26,24 +27,26 @@ describe('bundalo Error callback @callback-errors@', function () {
 			locality: 'ab-CD'
 		}, function (err) {
 			if (process.platform !== 'win32' && process.platform !== 'win64') {
+				assert.ok(err);
 				assert.equal(err.name, 'Error');
-				assert.ok(err.message.indexOf('EISDIR') === 0);
-            }
+				assert.ok(err.message.indexOf('ENOENT') === 0);
+			}
 			done();
 		});
 	});
 
-	it('will gracefully callback with an EISDIR if the bundle does not exist in the contentPath', function (done) {
+	it('will gracefully callback with an ENOENT if the bundle does not exist in the contentPath', function (done) {
 		bundalo({
 			contentPath: path.join(__dirname, 'fixture', 'locales')
 		}).get({
-			bundle: Math.random().toString(),
+			bundle: 'does not exist',
 			locality: 'en-US'
 		}, function (err) {
 			if (process.platform !== 'win32' && process.platform !== 'win64') {
+				assert.ok(err);
 				assert.equal(err.name, 'Error');
-				assert.ok(err.message.indexOf('EISDIR') === 0);
-            }
+				assert.ok(err.message.indexOf('ENOENT') === 0);
+			}
 			done();
 		});
 	});

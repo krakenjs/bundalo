@@ -8,7 +8,7 @@ var assert = require('assert');
 
 describe("bundalo none bundler @none@", function () {
 	it("should maintain one cache per instance", function (done) {
-		var contentPath = path.join(__dirname, 'fixture', 'nolocale');
+		var contentPath = path.resolve(__dirname, 'fixture', 'nolocale');
 		var fallback = "";
 		var bundloo = bundalo({"contentPath": contentPath, "fallback": fallback});
 		var bundlee = bundalo({"contentPath": contentPath, "fallback": fallback});
@@ -22,8 +22,8 @@ describe("bundalo none bundler @none@", function () {
 
 			try {
 				assert(data.greeting);
-				assert(bundloo.__cache()[path.normalize('nest/nonea.properties')]);
-				assert(!bundlee.__cache()[path.normalize('nest/nonea.properties')]);
+				assert(bundloo.__cache()[path.resolve(contentPath, 'nest/nonea.properties')]);
+				assert(!bundlee.__cache()[path.resolve(contentPath, 'nest/nonea.properties')]);
 				done();
 			} catch (e) {
 				done(e);
@@ -34,7 +34,7 @@ describe("bundalo none bundler @none@", function () {
 
 describe("bundalo none bundler @none@disableCache@", function () {
 	it("should not maintain cache", function (done) {
-		var contentPath = path.join(__dirname, 'fixture', 'nolocale');
+		var contentPath = path.resolve(__dirname, 'fixture', 'nolocale');
 		var fallback = "";
 		var bundloo = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback, "cache": false});
 		bundloo.get({
@@ -46,7 +46,7 @@ describe("bundalo none bundler @none@disableCache@", function () {
 			}
 			try {
 				assert(data.greeting);
-				assert(!bundloo.__cache()[path.normalize('nest/nonea.properties')]);
+				assert(!bundloo.__cache()[path.resolve(contentPath, 'nest/nonea.properties')]);
 				done();
 			} catch (e) {
 				done(e);
@@ -56,7 +56,7 @@ describe("bundalo none bundler @none@disableCache@", function () {
 });
 
 describe("bundalo none bundler, no locale @none@nofallback@", function () {
-	var contentPath = path.join(__dirname, 'fixture', 'nolocale');
+	var contentPath = path.resolve(__dirname, 'fixture', 'nolocale');
 	var fallback = "";
 	var _bundalo;
 	before(function () {
@@ -74,7 +74,7 @@ describe("bundalo none bundler, no locale @none@nofallback@", function () {
 			}
 			try {
 				assert(data.greeting);
-				assert(_bundalo.__cache()[path.normalize('nest/nonea.properties')]);
+				assert(_bundalo.__cache()[path.resolve(contentPath, 'nest/nonea.properties')]);
 				done();
 			} catch (e) {
 				done(e);
@@ -122,7 +122,7 @@ describe("bundalo none bundler, no locale @none@nofallback@", function () {
 //
 //
 describe("bundalo none bundler, existing locale @none@nofallback@", function () {
-	var contentPath = path.join(__dirname, "fixture", "locales");
+	var contentPath = path.resolve(__dirname, "fixture", "locales");
 	var fallback = "en-US";
 	var _bundalo;
 	before(function () {
@@ -157,7 +157,7 @@ describe("bundalo none bundler, existing locale @none@nofallback@", function () 
 			try {
 				assert(data['nest/nonea'].greeting);
 				assert(data['nest/noneb'].signoff);
-				assert(_bundalo.__cache()[path.normalize('ES/es/nest/noneb.properties')]);
+				assert(_bundalo.__cache()[path.resolve(contentPath, 'ES/es/nest/noneb.properties')]);
 				done();
 			} catch (e) {
 				done(e);
@@ -187,7 +187,7 @@ describe("bundalo none bundler, existing locale @none@nofallback@", function () 
 });
 
 describe("bundalo none bundler, fallback locale @none@fallback@", function () {
-	var contentPath = path.join(__dirname, "fixture", "locales");
+	var contentPath = path.resolve(__dirname, "fixture", "locales");
 	var fallback = "en-US";
 	var locality = "fr-FR";
 	var _bundalo;

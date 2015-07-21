@@ -20,14 +20,15 @@
 'use strict';
 var fs = require('fs');
 var spud = require('spud');
-var Resolver = require('./lib/resolver');
 var loopalo = require('./lib/loopalo');
 var iferr = require('iferr');
 var async = require('async');
 
+var fileResolver = require('file-resolver');
+
 
 function Bundler(config) {
-	this.resolver = new Resolver(config);
+	this.resolver = fileResolver.create({ root: config.contentPath, ext: 'properties', fallback: config.fallback});
 	this.doCache = (config.cache !== undefined && config.cache === false) ? false : true;
 	this.cache = {};
 }
@@ -35,9 +36,9 @@ function Bundler(config) {
 Bundler.prototype.get = function (config, callback) {
 	var that = this;
 
-	function noneBundler(bundleFile, cacheKey, cb) {
-		if (that.cache && that.cache[cacheKey]) {
-			async.ensureAsync(cb(null, that.cache[cacheKey]));
+	function noneBundler(bundleFile, cb) {
+		if (that.cache && that.cache[bundleFile]) {
+			async.ensureAsync(cb(null, that.cache[bundleFile]));
 			return;
 		}
 		//not yet in cache
@@ -45,7 +46,7 @@ Bundler.prototype.get = function (config, callback) {
 			try {
 				var parsed = spud.parse(bundleBuffer.toString());
 				if (that.doCache) {
-					that.cache[cacheKey] = parsed;
+					that.cache[bundleFile] = parsed;
 				}
 				safe(cb)(null, parsed);
 			} catch (e) {
