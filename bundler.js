@@ -20,61 +20,45 @@
 'use strict';
 var fs = require('fs');
 var spud = require('spud');
-var freshy = require('freshy');
-var loopalo = require('../lib/loopalo');
-var Resolver = require('../lib/resolver');
+var Resolver = require('./lib/resolver');
+var loopalo = require('./lib/loopalo');
 var iferr = require('iferr');
+var async = require('async');
 
 
-function Dust(config) {
-	this.dust = freshy.freshy('dustjs-linkedin');
-	//preserve whitespace
-	this.dust.optimizers.format = function(ctx, node) { return node; };
+function Bundler(config) {
 	this.resolver = new Resolver(config);
-	this.doCache = !!('cache' in config ? config.cache : true);
+	this.doCache = (config.cache !== undefined && config.cache === false) ? false : true;
+	this.cache = {};
 }
 
-Dust.prototype.get = function (config, callback) {
-	//single bundle config {"bundle": "errors/server", "model": {"name": "Will Robinson"}}
-	//multiple bundle config {"bundle": ["errors/server", "errors/client"], "model": {"name": "Will Robinson"}}
+Bundler.prototype.get = function (config, callback) {
 	var that = this;
-	function dustRender(cacheKey, model, cb) {
-		that.dust.render(cacheKey, model || {}, iferr(cb, function renderCallback(out) {
-			if (!that.doCache) {
-				delete that.dust.cache[cacheKey];
-			}
 
+	function noneBundler(bundleFile, cacheKey, cb) {
+		if (that.cache && that.cache[cacheKey]) {
+			async.ensureAsync(cb(null, that.cache[cacheKey]));
+			return;
+		}
+		//not yet in cache
+		fs.readFile(bundleFile, iferr(callback, function handleBundleBuffer(bundleBuffer) {
 			try {
-				cb(null, spud.parse(out));
+				var parsed = spud.parse(bundleBuffer.toString());
+				if (that.doCache) {
+					that.cache[cacheKey] = parsed;
+				}
+				cb(null, parsed);
 			} catch (e) {
 				cb(e);
 			}
 		}));
 	}
 
-	function dustBundler(bundleFile, cacheKey, cb) {
-		if (that.dust.cache && that.dust.cache[cacheKey]) {
-			return dustRender(cacheKey, config.model, cb);
-		}
-
-		//not yet in cache
-		fs.readFile(bundleFile, iferr(cb, function handleBundleBuffer(bundleBuffer) {
-			try {
-				var compiled = that.dust.compile(bundleBuffer.toString(), cacheKey);
-				that.dust.loadSource(compiled);
-				return dustRender(cacheKey, config.model, cb);
-			} catch (dustErr) {
-				return cb(dustErr);
-			}
-		}));
-	}
-
-
-	loopalo(config.bundle, config, this.resolver, dustBundler, callback);
+	loopalo(config.bundle, config, this.resolver, noneBundler, callback);
 };
 
-Dust.prototype.__cache = function () {
-	return this.dust.cache;
+Bundler.prototype.__cache = function () {
+	return this.cache;
 };
 
-module.exports = Dust;
+module.exports = Bundler;

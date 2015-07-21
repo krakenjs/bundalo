@@ -37,13 +37,12 @@
   },
   "dependencies": {
     "async": "^1.3.0",
-    "dustjs-linkedin": "~2.7.2",
     "debuglog": "^1.0.1",
+    "dustjs-linkedin": "~2.7.2",
     "file-resolver": "^1.0.0",
     "freshy": "^1.0.0",
     "iferr": "^0.1.5",
     "lodash": "^3.10.0",
-    "spud": "^2.0.1",
-    "verror": "^1.6.0"
+    "spud": "^2.0.1"
   }
 }
