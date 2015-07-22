@@ -42,6 +42,7 @@
     "file-resolver": "^1.0.0",
     "freshy": "^1.0.0",
     "iferr": "^0.1.5",
+    "monkeymap": "^1.1.1",
     "spud": "^2.0.1"
   }
 }
