@@ -23,10 +23,12 @@ var spud = require('spud');
 var iferr = require('iferr');
 var async = require('async');
 
+var freshy = require('freshy');
+var dust = freshy.freshy('dustjs-linkedin');
+
 var monkeymap = require('monkeymap');
 
 var fileResolver = require('file-resolver');
-
 
 function Bundler(config) {
 	this.resolver = fileResolver.create({ root: config.contentPath, ext: 'properties', fallback: config.fallback});
@@ -38,7 +40,7 @@ Bundler.prototype.get = function (config, callback) {
     var resolver = this.resolver;
     var bundle = Array.isArray(config.bundle) ? makeObj(config.bundle) : config.bundle;
     monkeymap(bundle, function (file, next) {
-        async.compose(readCached(cache), resolve(resolver, config.locale || config.locality))(file, next);
+        async.compose(decorate, readCached(cache), resolve(resolver, config.locale || config.locality))(file, next);
     }, callback);
 };
 
@@ -79,6 +81,18 @@ function readCached(cache) {
 			}
 		}));
 	};
+}
+
+function decorate(obj, cb) {
+    var cache = {};
+    obj.formatDust = function (prop, model, renderCb) {
+        if (!cache[prop]) {
+            cache[prop] = dust.loadSource(dust.compile(obj[prop]));
+        }
+
+        dust.render(cache[prop], model, renderCb);
+    };
+    cb(null, obj);
 }
 
 function makeObj(arr) {

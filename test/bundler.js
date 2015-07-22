@@ -251,3 +251,31 @@ describe("bundalo none bundler, fallback locale @none@fallback@", function () {
 		});
 	});
 });
+
+describe("bundalo with dust", function () {
+	it("should format messages given a model", function (done) {
+		var contentPath = path.resolve(__dirname, 'fixture', 'nolocale');
+		var bundloo = bundalo({"contentPath": contentPath});
+		bundloo.get({
+			'bundle': 'nest/dusta',
+			'locality': ''
+		}, function bundaloReturn(err, data) {
+			if (err) {
+				return done(err);
+			}
+
+            data.formatDust('greeting', { name: 'World' }, function (innererr, rendered) {
+                if (innererr) {
+                    return done(innererr);
+                }
+
+                try {
+                    assert.equal(rendered, "Hello, World");
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            });
+		});
+	});
+});
