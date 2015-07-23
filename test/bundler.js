@@ -21,7 +21,7 @@ describe("bundalo none bundler @none@", function () {
 			}
 
 			try {
-				assert(data.greeting);
+				assert(data.get('greeting'));
 				assert(bundloo.__cache()[path.resolve(contentPath, 'nest/nonea.properties')]);
 				assert(!bundlee.__cache()[path.resolve(contentPath, 'nest/nonea.properties')]);
 				done();
@@ -45,7 +45,7 @@ describe("bundalo none bundler @none@disableCache@", function () {
 				return done(err);
 			}
 			try {
-				assert(data.greeting);
+				assert(data.get('greeting'));
 				assert(!bundloo.__cache()[path.resolve(contentPath, 'nest/nonea.properties')]);
 				done();
 			} catch (e) {
@@ -73,7 +73,7 @@ describe("bundalo none bundler, no locale @none@nofallback@", function () {
 				return done(err);
 			}
 			try {
-				assert(data.greeting);
+				assert(data.get('greeting'));
 				assert(_bundalo.__cache()[path.resolve(contentPath, 'nest/nonea.properties')]);
 				done();
 			} catch (e) {
@@ -90,8 +90,8 @@ describe("bundalo none bundler, no locale @none@nofallback@", function () {
 				return done(err);
 			}
 			try {
-				assert(data['nest/nonea'].greeting);
-				assert(data['nest/noneb'].signoff);
+				assert(data['nest/nonea'].get('greeting'));
+				assert(data['nest/noneb'].get('signoff'));
 				done();
 			} catch (e) {
 				done(e);
@@ -110,8 +110,8 @@ describe("bundalo none bundler, no locale @none@nofallback@", function () {
 				return done(err);
 			}
 			try {
-				assert(data.nonea.greeting);
-				assert(data.noneb.signoff);
+				assert(data.nonea.get('greeting'));
+				assert(data.noneb.get('signoff'));
 				done();
 			} catch (e) {
 				done(e);
@@ -139,7 +139,7 @@ describe("bundalo none bundler, existing locale @none@nofallback@", function () 
 			}
 
 			try {
-				assert(data.greeting);
+				assert(data.get('greeting'));
 				done();
 			} catch (e) {
 				done(e);
@@ -155,8 +155,8 @@ describe("bundalo none bundler, existing locale @none@nofallback@", function () 
 				return done(err);
 			}
 			try {
-				assert(data['nest/nonea'].greeting);
-				assert(data['nest/noneb'].signoff);
+				assert(data['nest/nonea'].get('greeting'));
+				assert(data['nest/noneb'].get('signoff'));
 				assert(_bundalo.__cache()[path.resolve(contentPath, 'ES/es/nest/noneb.properties')]);
 				done();
 			} catch (e) {
@@ -176,8 +176,8 @@ describe("bundalo none bundler, existing locale @none@nofallback@", function () 
 				return done(err);
 			}
 			try {
-				assert(data.nonea.greeting);
-				assert(data.noneb.signoff);
+				assert(data.nonea.get('greeting'));
+				assert(data.noneb.get('signoff'));
 				done();
 			} catch (e) {
 				done(e);
@@ -207,7 +207,7 @@ describe("bundalo none bundler, fallback locale @none@fallback@", function () {
 				return done(err);
 			}
 			try {
-				assert(data.greeting);
+				assert(data.get('greeting'));
 				done();
 			} catch (e) {
 				done(e);
@@ -223,8 +223,8 @@ describe("bundalo none bundler, fallback locale @none@fallback@", function () {
 			}
 
 			try {
-				assert(data['nest/nonea'].greeting);
-				assert(data['nest/noneb'].signoff);
+				assert(data['nest/nonea'].get('greeting'));
+				assert(data['nest/noneb'].get('signoff'));
 				done();
 			} catch (e) {
 				done(e);
@@ -242,8 +242,8 @@ describe("bundalo none bundler, fallback locale @none@fallback@", function () {
 				return done(err);
 			}
 			try {
-				assert(data.nonea.greeting);
-				assert(data.noneb.signoff);
+				assert(data.nonea.get('greeting'));
+				assert(data.noneb.get('signoff'));
 				done();
 			} catch (e) {
 				done(e);
@@ -278,27 +278,8 @@ describe("bundalo with dust", function () {
             });
 		});
 	});
-	it("should have a simple accessor function", function (done) {
-		var contentPath = path.resolve(__dirname, 'fixture', 'nolocale');
-		var bundloo = bundalo({"contentPath": contentPath});
-		bundloo.get({
-			'bundle': 'nest/dusta',
-			'locality': ''
-		}, function bundaloReturn(err, data) {
-			if (err) {
-				return done(err);
-			}
 
-            try {
-                var value = data.get('greeting');
-                assert.equal(value, "Hello, {name}");
-                done();
-            } catch (e) {
-                done(e);
-            }
-		});
-	});
-	it("should have a simple accessor function that accepts jsonpath", function (done) {
+	it("should accept jsonpath", function (done) {
 		var contentPath = path.resolve(__dirname, 'fixture', 'nolocale');
 		var bundloo = bundalo({"contentPath": contentPath});
 		bundloo.get({
@@ -310,7 +291,6 @@ describe("bundalo with dust", function () {
 			}
 
             try {
-                assert.equal(data.get('greeting'), "Hello, Friend");
                 assert.equal(data.get('deep.greeting'), "So nice to meet you");
                 done();
             } catch (e) {

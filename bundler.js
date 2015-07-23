@@ -86,30 +86,30 @@ function readCached(cache) {
 }
 
 function decorate(obj, cb) {
-    var cache = {};
-    cb(null, Object.create(obj, {
-        formatDust: {
-            value: function (pattern, model, renderCb) {
-                if (!cache[pattern]) {
-                    cache[pattern] = dust.loadSource(dust.compile(this.get(pattern)));
-                }
-
-                dust.render(cache[pattern], model, renderCb);
-            }
-        },
-        get: {
-            value: function (pattern) {
-                return this.getAll(pattern)[0];
-            }
-        },
-        getAll: {
-            value: function (pattern) {
-                var matcher = fastpath(pattern);
-                return matcher.evaluate(obj);
-            }
-        }
-    }));
+    cb(null, new Bundle(obj));
 }
+
+function Bundle(obj) {
+    this.content = obj;
+    this.cache = {};
+}
+
+Bundle.prototype = {
+    formatDust: function (pattern, model, renderCb) {
+        if (!this.cache[pattern]) {
+            this.cache[pattern] = dust.loadSource(dust.compile(this.get(pattern)));
+        }
+
+        dust.render(this.cache[pattern], model, renderCb);
+    },
+    get: function (pattern) {
+        return this.getAll(pattern)[0];
+    },
+    getAll: function (pattern) {
+        var matcher = fastpath(pattern);
+        return matcher.evaluate(this.content);
+    }
+};
 
 function makeObj(arr) {
     return arr.reduce(function (a, e) {
