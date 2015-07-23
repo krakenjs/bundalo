@@ -278,4 +278,24 @@ describe("bundalo with dust", function () {
             });
 		});
 	});
+	it("should have a simple accessor function", function (done) {
+		var contentPath = path.resolve(__dirname, 'fixture', 'nolocale');
+		var bundloo = bundalo({"contentPath": contentPath});
+		bundloo.get({
+			'bundle': 'nest/dusta',
+			'locality': ''
+		}, function bundaloReturn(err, data) {
+			if (err) {
+				return done(err);
+			}
+
+            try {
+                var value = data.get('greeting');
+                assert.equal(value, "Hello, {name}");
+                done();
+            } catch (e) {
+                done(e);
+            }
+		});
+	});
 });

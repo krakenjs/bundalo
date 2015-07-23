@@ -85,14 +85,22 @@ function readCached(cache) {
 
 function decorate(obj, cb) {
     var cache = {};
-    obj.formatDust = function (prop, model, renderCb) {
-        if (!cache[prop]) {
-            cache[prop] = dust.loadSource(dust.compile(obj[prop]));
-        }
+    cb(null, Object.create(obj, {
+        formatDust: {
+            value: function (prop, model, renderCb) {
+                if (!cache[prop]) {
+                    cache[prop] = dust.loadSource(dust.compile(obj[prop]));
+                }
 
-        dust.render(cache[prop], model, renderCb);
-    };
-    cb(null, obj);
+                dust.render(cache[prop], model, renderCb);
+            }
+        },
+        get: {
+            value: function (prop) {
+                return obj[prop];
+            }
+        }
+    }));
 }
 
 function makeObj(arr) {
