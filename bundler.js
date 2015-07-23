@@ -30,6 +30,8 @@ var monkeymap = require('monkeymap');
 
 var fileResolver = require('file-resolver');
 
+var fastpath = require('fastpath');
+
 function Bundler(config) {
 	this.resolver = fileResolver.create({ root: config.contentPath, ext: 'properties', fallback: config.fallback});
 	this.cache = (config.cache !== undefined && config.cache === false) ? null : {};
@@ -87,17 +89,23 @@ function decorate(obj, cb) {
     var cache = {};
     cb(null, Object.create(obj, {
         formatDust: {
-            value: function (prop, model, renderCb) {
-                if (!cache[prop]) {
-                    cache[prop] = dust.loadSource(dust.compile(obj[prop]));
+            value: function (pattern, model, renderCb) {
+                if (!cache[pattern]) {
+                    cache[pattern] = dust.loadSource(dust.compile(this.get(pattern)));
                 }
 
-                dust.render(cache[prop], model, renderCb);
+                dust.render(cache[pattern], model, renderCb);
             }
         },
         get: {
-            value: function (prop) {
-                return obj[prop];
+            value: function (pattern) {
+                return this.getAll(pattern)[0];
+            }
+        },
+        getAll: {
+            value: function (pattern) {
+                var matcher = fastpath(pattern);
+                return matcher.evaluate(obj);
             }
         }
     }));

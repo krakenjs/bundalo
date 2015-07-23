@@ -298,4 +298,24 @@ describe("bundalo with dust", function () {
             }
 		});
 	});
+	it("should have a simple accessor function that accepts jsonpath", function (done) {
+		var contentPath = path.resolve(__dirname, 'fixture', 'nolocale');
+		var bundloo = bundalo({"contentPath": contentPath});
+		bundloo.get({
+			'bundle': 'nest/nonea',
+			'locality': ''
+		}, function bundaloReturn(err, data) {
+			if (err) {
+				return done(err);
+			}
+
+            try {
+                assert.equal(data.get('greeting'), "Hello, Friend");
+                assert.equal(data.get('deep.greeting'), "So nice to meet you");
+                done();
+            } catch (e) {
+                done(e);
+            }
+		});
+	});
 });
