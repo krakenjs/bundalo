@@ -47,15 +47,27 @@ Bundler.prototype.get = function (config, callback) {
 				if (that.doCache) {
 					that.cache[cacheKey] = parsed;
 				}
-				cb(null, parsed);
+				safe(cb)(null, parsed);
 			} catch (e) {
-				cb(e);
+				safe(cb)(e);
 			}
 		}));
 	}
 
 	loopalo(config.bundle, config, this.resolver, noneBundler, callback);
 };
+
+function safe(cb) {
+    return function() {
+        try {
+            cb.apply(this, arguments);
+        } catch (e) {
+            setImmediate(function () {
+                throw e;
+            });
+        }
+    };
+}
 
 Bundler.prototype.__cache = function () {
 	return this.cache;
