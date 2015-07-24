@@ -5,13 +5,14 @@ var bundalo = require("../index");
 var engine = "none";
 var path = require('path');
 var assert = require('assert');
+var formatPath = require('kraken-format-path');
 
 describe("bundalo none bundler @none@", function () {
 	it("should maintain one cache per instance", function (done) {
 		var contentPath = path.resolve(__dirname, 'fixture', 'nolocale');
 		var fallback = "";
-		var bundloo = bundalo({"contentPath": contentPath, "fallback": fallback});
-		var bundlee = bundalo({"contentPath": contentPath, "fallback": fallback});
+		var bundloo = bundalo({ contentPath: contentPath, fallback: fallback, formatPath: formatPath });
+		var bundlee = bundalo({ contentPath: contentPath, fallback: fallback, formatPath: formatPath });
 		bundloo.get({
 			'bundle': 'nest/nonea',
 			'locality': ''
@@ -36,7 +37,7 @@ describe("bundalo none bundler @none@disableCache@", function () {
 	it("should not maintain cache", function (done) {
 		var contentPath = path.resolve(__dirname, 'fixture', 'nolocale');
 		var fallback = "";
-		var bundloo = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback, "cache": false});
+		var bundloo = bundalo({ contentPath: contentPath, engine: engine, fallback: fallback, cache: false, formatPath: formatPath });
 		bundloo.get({
 			'bundle': 'nest/nonea',
 			'locality': ''
@@ -60,7 +61,7 @@ describe("bundalo none bundler, no locale @none@nofallback@", function () {
 	var fallback = "";
 	var _bundalo;
 	before(function () {
-		_bundalo = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback});
+		_bundalo = bundalo({ contentPath: contentPath, engine: engine, fallback: fallback, formatPath: formatPath });
 		return;
 	});
 
@@ -126,7 +127,7 @@ describe("bundalo none bundler, existing locale @none@nofallback@", function () 
 	var fallback = "en-US";
 	var _bundalo;
 	before(function () {
-		_bundalo = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback});
+		_bundalo = bundalo({ contentPath: contentPath, engine: engine, fallback: fallback, formatPath: formatPath });
 		return;
 	});
 	it("should give back single bundle", function (done) {
@@ -193,9 +194,10 @@ describe("bundalo none bundler, fallback locale @none@fallback@", function () {
 	var _bundalo;
 	before(function () {
 		_bundalo = bundalo({
-			'contentPath': contentPath,
-			'locality': locality,
-			'fallback': fallback
+			contentPath: contentPath,
+			locality: locality,
+			fallback: fallback,
+			formatPath: formatPath
 		});
 		return;
 	});
@@ -255,7 +257,7 @@ describe("bundalo none bundler, fallback locale @none@fallback@", function () {
 describe("bundalo with dust", function () {
 	it("should format messages given a model", function (done) {
 		var contentPath = path.resolve(__dirname, 'fixture', 'nolocale');
-		var bundloo = bundalo({"contentPath": contentPath});
+		var bundloo = bundalo({ contentPath: contentPath, formatPath: formatPath });
 		bundloo.get({
 			'bundle': 'nest/dusta',
 			'locality': ''
@@ -264,24 +266,24 @@ describe("bundalo with dust", function () {
 				return done(err);
 			}
 
-            data.formatDust('greeting', { name: 'World' }, function (innererr, rendered) {
-                if (innererr) {
-                    return done(innererr);
-                }
+			data.formatDust('greeting', { name: 'World' }, function (innererr, rendered) {
+				if (innererr) {
+					return done(innererr);
+				}
 
-                try {
-                    assert.equal(rendered, "Hello, World");
-                    done();
-                } catch (e) {
-                    done(e);
-                }
-            });
+				try {
+					assert.equal(rendered, "Hello, World");
+					done();
+				} catch (e) {
+					done(e);
+				}
+			});
 		});
 	});
 
 	it("should accept jsonpath", function (done) {
 		var contentPath = path.resolve(__dirname, 'fixture', 'nolocale');
-		var bundloo = bundalo({"contentPath": contentPath});
+		var bundloo = bundalo({ contentPath: contentPath, formatPath: formatPath });
 		bundloo.get({
 			'bundle': 'nest/nonea',
 			'locality': ''
@@ -290,12 +292,12 @@ describe("bundalo with dust", function () {
 				return done(err);
 			}
 
-            try {
-                assert.equal(data.get('deep.greeting'), "So nice to meet you");
-                done();
-            } catch (e) {
-                done(e);
-            }
+			try {
+				assert.equal(data.get('deep.greeting'), "So nice to meet you");
+				done();
+			} catch (e) {
+				done(e);
+			}
 		});
 	});
 });

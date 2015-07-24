@@ -18,49 +18,44 @@
 
 /*eslint no-underscore-dangle:0*/
 'use strict';
-var fs = require('fs');
-var spud = require('spud');
-var iferr = require('iferr');
 var async = require('async');
-
+var bcp47s = require('bcp47-stringify');
+var fastpath = require('fastpath');
+var fileResolver = require('file-resolver');
 var freshy = require('freshy');
+var fs = require('fs');
+var iferr = require('iferr');
+var monkeymap = require('monkeymap');
+var path = require('path');
+var spud = require('spud');
+
 var dust = freshy.freshy('dustjs-linkedin');
 
-var monkeymap = require('monkeymap');
-
-var fileResolver = require('file-resolver');
-
-var fastpath = require('fastpath');
-
 function Bundler(config) {
-	this.resolver = fileResolver.create({ root: config.contentPath, ext: 'properties', fallback: config.fallback});
+	this.resolver = fileResolver.create({
+		root: config.contentPath,
+		fallback: config.fallback,
+		formatPath: config.formatPath || bcp47s
+	});
 	this.cache = (config.cache !== undefined && config.cache === false) ? null : {};
 }
 
 Bundler.prototype.get = function (config, callback) {
-    var cache = this.cache;
-    var resolver = this.resolver;
-    var bundle = Array.isArray(config.bundle) ? makeObj(config.bundle) : config.bundle;
-    monkeymap(bundle, function (file, next) {
-        async.compose(decorate, readCached(cache), resolve(resolver, config.locale || config.locality))(file, next);
-    }, callback);
+	var cache = this.cache;
+	var resolver = this.resolver;
+	var bundle = Array.isArray(config.bundle) ? makeObj(config.bundle) : config.bundle;
+	monkeymap(bundle, function (file, next) {
+		if (path.extname(file) !== '.properties') {
+			file = file + '.properties';
+		}
+		async.compose(decorate, readCached(cache), resolve(resolver, config.locale || config.locality))(file, next);
+	}, callback);
 };
 
 function resolve(resolver, locale) {
-    return function (filename, callback) {
-        try {
-            var file = resolver.resolve(filename, locale).file;
-            if (!file) {
-				var err = new Error("ENOENT: no such file or directory '" + filename + "'");
-				err.code = 'ENOENT';
-				err.path = filename;
-				throw err;
-            }
-            callback(null, file);
-        } catch (e) {
-            callback(e);
-        }
-    };
+	return function (filename, callback) {
+		resolver.resolve(filename, locale, callback);
+	};
 }
 
 function readCached(cache) {
@@ -86,52 +81,52 @@ function readCached(cache) {
 }
 
 function decorate(obj, cb) {
-    cb(null, new Bundle(obj));
+	cb(null, new Bundle(obj));
 }
 
 function Bundle(obj) {
-    this.content = obj;
-    this.cache = {};
+	this.content = obj;
+	this.cache = {};
 }
 
 Bundle.prototype = {
-    formatDust: function (pattern, model, renderCb) {
-        if (!this.cache[pattern]) {
-            this.cache[pattern] = dust.loadSource(dust.compile(this.get(pattern)));
-        }
+	formatDust: function (pattern, model, renderCb) {
+		if (!this.cache[pattern]) {
+			this.cache[pattern] = dust.loadSource(dust.compile(this.get(pattern)));
+		}
 
-        dust.render(this.cache[pattern], model, renderCb);
-    },
-    get: function (pattern) {
-        return this.getAll(pattern)[0];
-    },
-    getAll: function (pattern) {
-        if (pattern) {
-            var matcher = fastpath(pattern);
-            return matcher.evaluate(this.content);
-        } else {
-            return this.content;
-        }
-    }
+		dust.render(this.cache[pattern], model, renderCb);
+	},
+	get: function (pattern) {
+		return this.getAll(pattern)[0];
+	},
+	getAll: function (pattern) {
+		if (pattern) {
+			var matcher = fastpath(pattern);
+			return matcher.evaluate(this.content);
+		} else {
+			return this.content;
+		}
+	}
 };
 
 function makeObj(arr) {
-    return arr.reduce(function (a, e) {
-        a[e] = e;
-        return a;
-    }, {});
+	return arr.reduce(function (a, e) {
+		a[e] = e;
+		return a;
+	}, {});
 }
 
 function safe(cb) {
-    return function() {
-        try {
-            cb.apply(this, arguments);
-        } catch (e) {
-            setImmediate(function () {
-                throw e;
-            });
-        }
-    };
+	return function() {
+		try {
+			cb.apply(this, arguments);
+		} catch (e) {
+			setImmediate(function () {
+				throw e;
+			});
+		}
+	};
 }
 
 Bundler.prototype.__cache = function () {
