@@ -106,8 +106,12 @@ Bundle.prototype = {
         return this.getAll(pattern)[0];
     },
     getAll: function (pattern) {
-        var matcher = fastpath(pattern);
-        return matcher.evaluate(this.content);
+        if (pattern) {
+            var matcher = fastpath(pattern);
+            return matcher.evaluate(this.content);
+        } else {
+            return this.content;
+        }
     }
 };
 
