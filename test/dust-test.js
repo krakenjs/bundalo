@@ -231,41 +231,20 @@ describe("bundalo dust bundler, existing locale @dust@nofallback@locale@", funct
 });
 
 
-describe("bundalo dust bundler, fallback locale @dust@fallback@", function () {
+
+describe("bundalo dust bundler, existing locale, country group, @dust@nofallback@locale@countrygroup@", function () {
 	var contentPath = process.cwd() + "/test/fixture/locales";
-	var fallback = "es-ES";
-	var locality = "fr-FR";
+	var fallback = "en-US";
 	var _bundalo;
 	before(function () {
-		_bundalo = bundalo({
-			contentPath: contentPath,
-			locality: locality,
-			fallback: fallback,
-			engine: 'dust'
-		});
+		_bundalo = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback});
 		return;
 	});
-	it("should give back single bundle", function (done) {
+
+	it("should give back the group_B bundle", function (done) {
 		_bundalo.get({
 			bundle: 'nest/dusta',
-			model: {
-				name: 'Mundo'
-			}
-		}, function bundaloReturn(err, data) {
-			if (err) {
-				return done(err);
-			}
-			try {
-				assert.equal(data.greeting, "Hola al Mundo");
-				done();
-			} catch (e) {
-				done(e);
-			}
-		});
-	});
-	it("should give back multiple bundles", function (done) {
-		_bundalo.get({
-			bundle: ['nest/dusta', 'nest/dustb'],
+			locality: {country: 'group_B', language: 'es', locale: 'es_group_B'},
 			model: {
 				name: "Mundo"
 			}
@@ -274,30 +253,7 @@ describe("bundalo dust bundler, fallback locale @dust@fallback@", function () {
 				return done(err);
 			}
 			try {
-				assert.equal(data['nest/dusta'].greeting, "Hola al Mundo");
-				assert.equal(data['nest/dustb'].signoff, "Adios al Mundo!");
-				done();
-			} catch (e) {
-				done(e);
-			}
-		});
-	});
-	it("should give back multiple bundles with alias", function (done) {
-		_bundalo.get({
-			bundle: {
-				dusta: 'nest/dusta',
-				dustb: 'nest/dustb'
-			},
-			model: {
-				name: "Mundo"
-			}
-		}, function bundaloReturn(err, data) {
-			if (err) {
-				return done(err);
-			}
-			try {
-				assert.equal(data.dusta.greeting, "Hola al Mundo");
-				assert.equal(data.dustb.signoff, "Adios al Mundo!");
+				assert.equal(data.greeting, "Hola al Mundo group b");
 				done();
 			} catch (e) {
 				done(e);
@@ -305,3 +261,4 @@ describe("bundalo dust bundler, fallback locale @dust@fallback@", function () {
 		});
 	});
 });
+
