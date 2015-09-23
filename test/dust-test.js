@@ -231,6 +231,80 @@ describe("bundalo dust bundler, existing locale @dust@nofallback@locale@", funct
 });
 
 
+describe("bundalo dust bundler, fallback locale @dust@fallback@", function () {
+	var contentPath = process.cwd() + "/test/fixture/locales";
+	var fallback = "es-ES";
+	var locality = "fr-FR";
+	var _bundalo;
+	before(function () {
+		_bundalo = bundalo({
+			contentPath: contentPath,
+			locality: locality,
+			fallback: fallback,
+			engine: 'dust'
+		});
+		return;
+	});
+	it("should give back single bundle", function (done) {
+		_bundalo.get({
+			bundle: 'nest/dusta',
+			model: {
+				name: 'Mundo'
+			}
+		}, function bundaloReturn(err, data) {
+			if (err) {
+				return done(err);
+			}
+			try {
+				assert.equal(data.greeting, "Hola al Mundo");
+				done();
+			} catch (e) {
+				done(e);
+			}
+		});
+	});
+	it("should give back multiple bundles", function (done) {
+		_bundalo.get({
+			bundle: ['nest/dusta', 'nest/dustb'],
+			model: {
+				name: "Mundo"
+			}
+		}, function bundaloReturn(err, data) {
+			if (err) {
+				return done(err);
+			}
+			try {
+				assert.equal(data['nest/dusta'].greeting, "Hola al Mundo");
+				assert.equal(data['nest/dustb'].signoff, "Adios al Mundo!");
+				done();
+			} catch (e) {
+				done(e);
+			}
+		});
+	});
+	it("should give back multiple bundles with alias", function (done) {
+		_bundalo.get({
+			bundle: {
+				dusta: 'nest/dusta',
+				dustb: 'nest/dustb'
+			},
+			model: {
+				name: "Mundo"
+			}
+		}, function bundaloReturn(err, data) {
+			if (err) {
+				return done(err);
+			}
+			try {
+				assert.equal(data.dusta.greeting, "Hola al Mundo");
+				assert.equal(data.dustb.signoff, "Adios al Mundo!");
+				done();
+			} catch (e) {
+				done(e);
+			}
+		});
+	});
+});
 
 describe("bundalo dust bundler, existing locale, country group, @dust@nofallback@locale@countrygroup@", function () {
 	var contentPath = process.cwd() + "/test/fixture/locales";
