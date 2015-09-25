@@ -305,3 +305,34 @@ describe("bundalo dust bundler, fallback locale @dust@fallback@", function () {
 		});
 	});
 });
+
+describe("bundalo dust bundler, existing locale, country group, @dust@nofallback@locale@countrygroup@", function () {
+	var contentPath = process.cwd() + "/test/fixture/locales";
+	var fallback = "en-US";
+	var _bundalo;
+	before(function () {
+		_bundalo = bundalo({"contentPath": contentPath, "engine": engine, "fallback": fallback});
+		return;
+	});
+
+	it("should give back the group_B bundle", function (done) {
+		_bundalo.get({
+			bundle: 'nest/dusta',
+			locality: {country: 'group_B', language: 'es', locale: 'es_group_B'},
+			model: {
+				name: "Mundo"
+			}
+		}, function bundaloReturn(err, data) {
+			if (err) {
+				return done(err);
+			}
+			try {
+				assert.equal(data.greeting, "Hola al Mundo group b");
+				done();
+			} catch (e) {
+				done(e);
+			}
+		});
+	});
+});
+
