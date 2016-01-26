@@ -11,7 +11,6 @@ Extract/cache/render property files/strings using i18n rules and various renderi
 ### Initialize bundalo
 
 Call bundalo module with a key that matches your template engine, plus locale information.
-Currently only dust and none are supported as engines.
 
 ```javascript
 var bundalo = require('bundalo');
@@ -20,7 +19,7 @@ var bundalo = require('bundalo');
 var config = {
 	"contentPath": "locales/", //required
 	"fallback": "en-US",       //optional
-	"engine": "dust",          //required
+	"engine": "dust",          //optional, defaults to "none" if not supplied
 	"cache": false             //optional, default is true
 };
 var config2 = {
@@ -74,6 +73,23 @@ bundle.get('bundle': {
 	});
 });
 ```
+
+## Available bundlers
+
+### dust
+
+Uses the dust template engine to handle model substitution
+
+### messageformat
+
+Uses [https://github.com/yahoo/intl-messageformat](https://github.com/yahoo/intl-messageformat) to handle i18n of the strings. If a data 
+model is supplied, the [IntlMessageFormat](https://github.com/yahoo/intl-messageformat#intlmessageformat-constructor) objects 
+will get [resolved](https://github.com/yahoo/intl-messageformat#formatvalues-method) to final content strings. 
+Otherwise, the returned object will hold the base IntlMessageFormat objects for the user to resolve within their own application.
+
+### none
+
+Does no attempted pre-processing of the strings in the properties file
 
 ## Design
 
