@@ -35,24 +35,44 @@ function IntlFmt(config) {
     this.cache = {};
 }
 
-function formatify(obj, locality, model) {
+function format(obj, locality) {
     if (thing.isString(obj)) {
         var fmtObj = new IntlMessageFormat(obj, locality);
-        return (model) ? fmtObj.format(model) : fmtObj;
+        //return (model) ? fmtObj.format(model) : fmtObj;
+        return fmtObj;
     }
     else if (thing.isObject(obj)) {
         Object.keys(obj).forEach(function (elt) {
-            obj[elt] = formatify(obj[elt], locality, model);
+            obj[elt] = format(obj[elt], locality);
         });
         return obj;
     }
     else if (thing.isArray(obj)) {
         return obj.map(function (elt) {
-            return formatify(elt, locality, model);
+            return format(elt, locality);
         });
     }
     //unconsidered use case? throw an error
-    throw new Error('undefined formatify use case!');
+    throw new Error('undefined format use case!');
+}
+
+function convert(obj, model) {
+    if (obj.format && thing.isFunction(obj.format)) {
+        return (model) ? obj.format(model) : obj;
+    }
+    else if (thing.isObject(obj)) {
+        Object.keys(obj).forEach(function (elt) {
+            obj[elt] = convert(obj[elt], model);
+        });
+        return obj;
+    }
+    else if (thing.isArray(obj)) {
+        return obj.map(function (elt) {
+            return convert(elt, model);
+        });
+    }
+    //unconsidered use case? throw an error
+    throw new Error('undefined convert use case!');
 }
 
 IntlFmt.prototype.get = function (config, callback) {
@@ -60,19 +80,19 @@ IntlFmt.prototype.get = function (config, callback) {
 
     function intlFmtBundler(bundleFile, cacheKey, cb) {
         if (that.cache && that.cache[cacheKey]) {
-            async.ensureAsync(cb(null, that.cache[cacheKey]));
+            async.ensureAsync(cb(null, convert(that.cache[cacheKey], config.model)));
             return;
         }
         //not yet in cache
         fs.readFile(bundleFile, iferr(callback, function handleBundleBuffer(bundleBuffer) {
             try {
-                var parsed = spud.parse(bundleBuffer.toString());
+                var json = spud.parse(bundleBuffer.toString());
                 //recurse into the JSON object and convert any string to a IntlMessageFormat object
-                parsed = formatify(parsed, config.locality || that.fallback, config.model || null);
+                var formatted = format(json, config.locality);
                 if (that.doCache) {
-                    that.cache[cacheKey] = parsed;
+                    that.cache[cacheKey] = formatted;
                 }
-                cb(null, parsed);
+                cb(null, convert(formatted, config.model));
             } catch (e) {
                 cb(e);
             }
