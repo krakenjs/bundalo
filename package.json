@@ -32,7 +32,9 @@
   },
   "homepage": "https://github.com/krakenjs/bundalo",
   "devDependencies": {
+    "core-util-is": "^1.0.2",
     "eslint": "^0.24.1",
+    "intl-messageformat": "^1.2.0",
     "kraken-format-path": "^1.0.0",
     "mocha": "^2.2.5"
   },

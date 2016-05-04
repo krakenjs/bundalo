@@ -42,9 +42,9 @@ User wants key/values from some bundle file, corrected for locality, and possibl
 ```javascript
 bundler.get({bundle: 'errors/server', locality: 'en-US'}, function bundaloReturn(err, bundle) {
     console.log("what'd we get from bundalo.get?", data, err);
-    data.formatDust('otherError', { message: "It was bad" }, function (err, formatted) {
+    bundle.formatDust('otherError', { message: "It was bad" }, function (err, formatted) {
         cb({
-            err: data.get('error'),
+            error: bundle.get('error'),
             otherError: formatted
         });
     });
@@ -54,11 +54,11 @@ bundler.get({bundle: 'errors/server', locality: 'en-US'}, function bundaloReturn
 User wants multiple bundles in a single call, to avoid calling bundalo multiple times
 
 ```javascript
-bundle.get({'bundle': ['errors/server', 'errors/client'], 'locality': 'en-US',  'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
+bundler.get({'bundle': ['errors/server', 'errors/client'], 'locality': 'en-US',  'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, bundle) {
     console.log("what'd we get from bundalo.get?", data, err);
     cb({
-        'clienterr': data['errors/client'].get('error'),
-        'servererr': data['errors/server'].get('error')
+        'clienterr': bundle['errors/client'].get('error'),
+        'servererr': bundle['errors/server'].get('error')
     });
 });
 ```

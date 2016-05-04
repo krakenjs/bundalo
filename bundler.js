@@ -37,18 +37,21 @@ function Bundler(config) {
 		fallback: config.fallback,
 		formatPath: config.formatPath || bcp47s
 	});
+	this.formatter = config.formatter || null;
 	this.cache = (config.cache !== undefined && config.cache === false) ? null : {};
 }
 
 Bundler.prototype.get = function (config, callback) {
 	var cache = this.cache;
+	var formatter = this.formatter;
 	var resolver = this.resolver;
 	var bundle = Array.isArray(config.bundle) ? makeObj(config.bundle) : config.bundle;
+	var locale = config.locale || config.locality;
 	monkeymap(bundle, function (file, next) {
 		if (path.extname(file) !== '.properties') {
 			file = file + '.properties';
 		}
-		async.compose(decorate, readCached(cache), resolve(resolver, config.locale || config.locality))(file, next);
+		async.compose(decorate, readCached(cache, formatter, locale), resolve(resolver, locale))(file, next);
 	}, callback);
 };
 
@@ -58,7 +61,7 @@ function resolve(resolver, locale) {
 	};
 }
 
-function readCached(cache) {
+function readCached(cache, formatter, locale) {
 
 	return function noneBundler(bundleFile, cb) {
 		if (cache && cache[bundleFile]) {
@@ -68,11 +71,12 @@ function readCached(cache) {
 		//not yet in cache
 		fs.readFile(bundleFile, iferr(cb, function handleBundleBuffer(bundleBuffer) {
 			try {
-				var parsed = spud.parse(bundleBuffer.toString());
+				var converted = spud.parse(bundleBuffer.toString());
+				converted = (formatter) ? formatter(converted, locale) : converted;
 				if (cache) {
-					cache[bundleFile] = parsed;
+					cache[bundleFile] = converted;
 				}
-				safe(cb)(null, parsed);
+				safe(cb)(null, converted);
 			} catch (e) {
 				safe(cb)(e);
 			}
