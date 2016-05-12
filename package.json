@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/krakenjs/bundalo",
   "devDependencies": {
-    "eslint": "^0.24.1",
+    "eslint": "^2.9.0",
     "mocha": "^2.2.5"
   },
   "dependencies": {
@@ -42,7 +42,7 @@
     "file-resolver": "^1.0.0",
     "freshy": "^1.0.0",
     "iferr": "^0.1.5",
-    "lodash": "^3.10.0",
+    "lodash": "^4.11.2",
     "spud": "^2.0.1",
     "verror": "^1.6.0"
   }
