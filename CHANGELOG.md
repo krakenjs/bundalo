@@ -2,12 +2,13 @@
 
 for pre-1.x versions, please see the [0.x-release](https://github.com/krakenjs/bundalo/tree/0.x-release) branch
 
-## v1.0.0-rc.1
+## v1.0.0-rc.3
 
 ### Breaking
 
 - make all access go via getter function
 - Remove all references to the dust bundler
+- Remove formatDust from the API
 
 ### Feature
 
