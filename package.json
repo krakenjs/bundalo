@@ -32,7 +32,9 @@
   },
   "homepage": "https://github.com/krakenjs/bundalo",
   "devDependencies": {
+    "dustjs-linkedin": "~2.7.2",
     "eslint": "^0.24.1",
+    "freshy": "^1.0.1",
     "kraken-format-path": "^1.0.0",
     "mocha": "^2.2.5"
   },
@@ -40,10 +42,8 @@
     "async": "^1.3.0",
     "bcp47-stringify": "^1.0.0",
     "debuglog": "^1.0.1",
-    "dustjs-linkedin": "~2.7.2",
     "fastpath": "^1.0.7",
     "file-resolver": "^2.0.0-3",
-    "freshy": "^1.0.1",
     "iferr": "^0.1.5",
     "monkeymap": "^1.1.1",
     "spud": "^2.0.1"
