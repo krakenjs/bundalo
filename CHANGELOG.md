@@ -2,6 +2,10 @@
 
 for pre-1.x versions, please see the [0.x-release](https://github.com/krakenjs/bundalo/tree/0.x-release) branch
 
+## v1.0.0
+
+- No changes from last rc
+
 ## v1.0.0-rc.3
 
 ### Breaking
