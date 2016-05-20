@@ -51,7 +51,6 @@ User wants multiple bundles in a single call, to avoid calling bundalo multiple 
 
 ```javascript
 bundler.get({'bundle': ['errors/server', 'errors/client'], 'locality': 'en-US',  'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
-    console.log("what'd we get from bundalo.get?", data, err);
     cb({
         'clienterr': data['errors/client'].get('error'),
         'servererr': data['errors/server'].get('error')
@@ -90,7 +89,6 @@ var dustFormatter = function (bundle) {
 
 bundler.get({bundle: 'errors/server', locality: 'en-US'}, function bundaloReturn(err, bundle) {
     bundle = dustFormatter(bundle);
-    console.log("what'd we get from bundalo.get?", data, err);
     bundle.formatDust('otherError', { message: "It was bad" }, function (err, formatted) {
         cb({
             err: bundle.get('error'),
