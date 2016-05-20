@@ -22,14 +22,11 @@ var async = require('async');
 var bcp47s = require('bcp47-stringify');
 var fastpath = require('fastpath');
 var fileResolver = require('file-resolver');
-var freshy = require('freshy');
 var fs = require('fs');
 var iferr = require('iferr');
 var monkeymap = require('monkeymap');
 var path = require('path');
 var spud = require('spud');
-
-var dust = freshy.freshy('dustjs-linkedin');
 
 function Bundler(config) {
 	this.resolver = fileResolver.create({
@@ -90,13 +87,6 @@ function Bundle(obj) {
 }
 
 Bundle.prototype = {
-	formatDust: function (pattern, model, renderCb) {
-		if (!this.cache[pattern]) {
-			this.cache[pattern] = dust.loadSource(dust.compile(this.get(pattern)));
-		}
-
-		dust.render(this.cache[pattern], model, renderCb);
-	},
 	get: function (pattern) {
 		return this.getAll(pattern)[0];
 	},

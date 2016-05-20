@@ -37,16 +37,12 @@ var bundle2 = bundalo(config);
 
 ### Use bundalo
 
-User wants key/values from some bundle file, corrected for locality, and possibly rendered with some data model
+User wants key/values from a bundle file, corrected for locality, and possibly rendered with some data model
 
 ```javascript
 bundler.get({bundle: 'errors/server', locality: 'en-US'}, function bundaloReturn(err, bundle) {
-    console.log("what'd we get from bundalo.get?", data, err);
-    data.formatDust('otherError', { message: "It was bad" }, function (err, formatted) {
-        cb({
-            err: data.get('error'),
-            otherError: formatted
-        });
+    cb({
+        serverError: bundle.get('serverError')
     });
 });
 ```
@@ -54,8 +50,7 @@ bundler.get({bundle: 'errors/server', locality: 'en-US'}, function bundaloReturn
 User wants multiple bundles in a single call, to avoid calling bundalo multiple times
 
 ```javascript
-bundle.get({'bundle': ['errors/server', 'errors/client'], 'locality': 'en-US',  'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
-    console.log("what'd we get from bundalo.get?", data, err);
+bundler.get({'bundle': ['errors/server', 'errors/client'], 'locality': 'en-US',  'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, data) {
     cb({
         'clienterr': data['errors/client'].get('error'),
         'servererr': data['errors/server'].get('error')
@@ -66,7 +61,7 @@ bundle.get({'bundle': ['errors/server', 'errors/client'], 'locality': 'en-US',  
 User wants multiple bundles in a single call, and wants to alias the bundles for easier management upon return
 
 ```javascript
-bundle.get('bundle': {
+bundler.get('bundle': {
     'server': 'errors/server',
     'client': 'errors/client'
 }, 'locality': 'en-US', 'model': {'name': 'Will Robinson'}}, function bundaloReturn(err, bundles) {
@@ -74,6 +69,31 @@ bundle.get('bundle': {
     cb({
         'clienterr': bundles.client.get('error'),
         'servererr': bundles.server.get('error')
+    });
+});
+```
+
+Here is a pattern to use if you need to process bundle data with some type of formatter (dust as an example):
+
+```javascript
+var dustFormatter = function (bundle) {
+    bundle.formatDust = function (pattern, model, renderCb) {
+        if (!this.cache[pattern]) {
+            this.cache[pattern] = dust.loadSource(dust.compile(this.get(pattern)));
+        }
+
+        dust.render(this.cache[pattern], model, renderCb);
+    };
+    return bundle;
+};
+
+bundler.get({bundle: 'errors/server', locality: 'en-US'}, function bundaloReturn(err, bundle) {
+    bundle = dustFormatter(bundle);
+    bundle.formatDust('otherError', { message: "It was bad" }, function (err, formatted) {
+        cb({
+            err: bundle.get('error'),
+            otherError: formatted
+        });
     });
 });
 ```
