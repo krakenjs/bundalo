@@ -1,5 +1,5 @@
 /*───────────────────────────────────────────────────────────────────────────*\
- │  Copyright (C) 2016 PayPal                                                  │
+ │  Copyright (C) 2017 PayPal                                                  │
  │                                                                             │
  │hh ,'""`.                                                                    │
  │  / _  _ \  Licensed under the Apache License, Version 2.0 (the "License");  │
@@ -26,4 +26,3 @@ function bundalo(config) {
 	return new Bundler(config);
 }
 module.exports = bundalo;
-
